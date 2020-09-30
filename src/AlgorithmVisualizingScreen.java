@@ -31,7 +31,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             "Counting sort (Not added)",
     };
 
-    public String mainFont = "Roboto";
+    public String mainFont = "Century Gothic";
 
     public AlgorithmVisualizingScreen(){
         f = new JFrame("Sorting Visualization");
