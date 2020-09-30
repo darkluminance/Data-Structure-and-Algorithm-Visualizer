@@ -58,10 +58,10 @@ public class SortArray extends JPanel {
         if (arrSize == 5) animSpeed = 500;
         else if (arrSize <= 10) animSpeed = 500;
         else if (arrSize <= 25) animSpeed = 150;
-        else if (arrSize <= 50) animSpeed = 25;
-        else if (arrSize <= 100) animSpeed = 5;
-        else if (arrSize <= 200) animSpeed = 2;
-        else if (arrSize <= 300) animSpeed = 1;
+        else if (arrSize <= 50) animSpeed = 35;
+        else if (arrSize <= 100) animSpeed = 20;
+        else if (arrSize <= 200) animSpeed = 10;
+        else if (arrSize <= 300) animSpeed = 5;
 
     }
 
@@ -136,6 +136,7 @@ public class SortArray extends JPanel {
 
     //Animation when full sorting is done
     public void sortAnim(){
+        sleep(500);
         for (int i = 0; i<arrSize; i++){
             //Checks if stop button is pressed while this animation is happening
             if(!isSorting)

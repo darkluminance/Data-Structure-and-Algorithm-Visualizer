@@ -2,10 +2,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 public class AlgorithmVisualizingScreen implements ActionListener {
     public static final int WIDTH = 1280;
@@ -23,14 +20,18 @@ public class AlgorithmVisualizingScreen implements ActionListener {
     SortArray sortarray;
     JComboBox<String> jComboBox;
     JTextField jTextField;
-    JSlider speedSlider;
+    JLabel speedSlider;
 
     String[] algorithms = {
             "Bubble sort",
             "Insertion sort",
             "Selection sort",
-            "Merge sort"
+            "Merge sort",
+            "Quick sort (Not added)",
+            "Counting sort (Not added)",
     };
+
+    public String mainFont = "Roboto";
 
     public AlgorithmVisualizingScreen(){
         f = new JFrame("Sorting Visualization");
@@ -42,12 +43,15 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         panel.setBackground(Color.darkGray);
         panel.setLayout(new GridLayout(1,100));        //Cols will be equal to max array size
         panel.setVisible(true);
+        panel.addMouseWheelListener(this::mouseWheelMoved);
 
         btnPanel = new JPanel();
         btnPanel.setBounds(win_WIDTH+10,0, WIDTH - 10 - win_WIDTH, HEIGHT);
         btnPanel.setBackground(sortarray.BGColor);
         btnPanel.setLayout(null);
         btnPanel.setVisible(true);
+        btnPanel.addMouseWheelListener(this::mouseWheelMoved);
+
 
         f.setSize(WIDTH, HEIGHT);   //Setting dimensions
 
@@ -61,7 +65,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         textboxText = new JLabel("<html>Enter array size<br>(5-300):</html>");
         textboxText.setBounds(30, 30, 180, 60);
-        textboxText.setFont(new Font("Century Gothic", Font.PLAIN, 20));
+        textboxText.setFont(new Font(mainFont, Font.PLAIN, 20));
         textboxText.setForeground(Color.white);
 
         jTextField = new JTextField(Integer.toString(arraySize));
@@ -69,7 +73,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         jTextField.setBounds(30, 100, 200, 50);
         jTextField.setBackground(new Color(102,102,102));
         jTextField.setForeground(Color.white);
-        jTextField.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        jTextField.setFont(new Font(mainFont, Font.BOLD, 20));
         jTextField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +102,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         generateArrayBtn.setBounds(30, 170, 200,50);
         generateArrayBtn.addActionListener(this);
         generateArrayBtn.setBackground(themeColor);
-        generateArrayBtn.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        generateArrayBtn.setFont(new Font(mainFont, Font.BOLD, 20));
         generateArrayBtn.setForeground(Color.white);
         generateArrayBtn.setFocusable(false);
         generateArrayBtn.setBorder(null);
@@ -119,7 +123,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         startBtn.setBounds(30, 240, 200,50);
         startBtn.addActionListener(this);
         startBtn.setBackground(themeColor);
-        startBtn.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        startBtn.setFont(new Font(mainFont, Font.BOLD, 20));
         startBtn.setForeground(Color.white);
         startBtn.setFocusable(false);
         startBtn.setBorder(null);
@@ -138,7 +142,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         jComboBox = new JComboBox<String>(algorithms);
         jComboBox.setBounds(30, 305, 200, 50);
-        jComboBox.setFont(new Font("Century Gothic", Font.BOLD, 18));
+        jComboBox.setFont(new Font(mainFont, Font.BOLD, 18));
         jComboBox.setBackground(themeColor);
         jComboBox.setForeground(Color.white);
         /*jComboBox.setBackground(Color.darkGray);
@@ -149,11 +153,11 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         jComboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if (jComboBox.getSelectedItem() == "Merge sort"){
-                    speedText.setText( "Speed: " + speedSlider.getValue()*2 + " ms");
+                /*if (jComboBox.getSelectedItem() == "Merge sort"){
+                    speedText.setText( "Speed: " + sortarray.animSpeed*2 + " ms");
                 }
-                else
-                    speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
+                else*/
+                    speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
             }
         });
 
@@ -164,47 +168,25 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         jComboBox.setVisible(true);
 
 
-        speedSlider = new JSlider(1,500);
-        speedSlider.setBounds(30, 380, 200, 30);
-        speedSlider.setBorder(null);
-        speedSlider.setBackground(themeColor);
-        speedSlider.setValue(2);
-        speedSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                sortarray.animSpeed = speedSlider.getValue();
+        speedSlider = new JLabel("<html>Use the mouse scroll wheel to change the animation delay.<br>" +
+                " Use the Ctrl or Shift keys along with the scroll wheel to change by bigger amount.</html>");
+        speedSlider.setBounds(30, 350, 200, 120);
+        speedSlider.setFont(new Font(mainFont, Font.PLAIN, 13));
+        speedSlider.setForeground(Color.white);
 
-                if (jComboBox.getSelectedItem() == "Merge sort"){
-                    speedText.setText( "Speed: " + speedSlider.getValue()*2 + " ms");
-                }
-                else
-                    speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
-            }
-        });
-
-        slow = new JLabel("Slow");
-        slow.setBounds(220, 392, 50, 50);
-        slow.setFont(new Font("Century Gothic", Font.PLAIN, 10));
-        slow.setForeground(Color.white);
-
-        fast = new JLabel("Fast");
-        fast.setBounds(20, 392, 50, 50);
-        fast.setFont(new Font("Century Gothic", Font.PLAIN, 10));
-        fast.setForeground(Color.white);
-
-        speedText = new JLabel( "Speed: " + speedSlider.getValue() + " ms");
-        speedText.setBounds(30, 420, 200, 50);
-        speedText.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+        speedText = new JLabel( "Speed: " + sortarray.animSpeed + " ms");
+        speedText.setBounds(30, 460, 200, 50);
+        speedText.setFont(new Font(mainFont, Font.PLAIN, 18));
         speedText.setForeground(Color.white);
 
         statusText = new JLabel("Unsorted");
-        statusText.setBounds(30, 470, 180, 50);
-        statusText.setFont(new Font("Century Gothic", Font.BOLD, 20));
+        statusText.setBounds(30, 510, 180, 50);
+        statusText.setFont(new Font(mainFont, Font.BOLD, 20));
         statusText.setForeground(Color.white);
 
         comparisonText = new JLabel("");
-        comparisonText.setBounds(30, 510, 180, 50);
-        comparisonText.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+        comparisonText.setBounds(30, 550, 180, 50);
+        comparisonText.setFont(new Font(mainFont, Font.PLAIN, 18));
         comparisonText.setForeground(Color.white);
 
 
@@ -218,8 +200,6 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         btnPanel.add(textboxText);
         btnPanel.add(comparisonText);
         btnPanel.add(speedSlider);
-        btnPanel.add(slow);
-        btnPanel.add(fast);
         btnPanel.add(speedText);
 
         panel.add(sortarray);
@@ -227,7 +207,6 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         f.add(btnPanel);
         f.add(panel);
-        //new SortingAlgorithms().bubbleSort(sortarray);
 
 
         f.setVisible(true);   //Visible
@@ -235,6 +214,34 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
     public static void main(String[] args) {
         AlgorithmVisualizingScreen avs = new AlgorithmVisualizingScreen();
+    }
+
+
+    //Mouse scroll event
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if (e.isControlDown())
+        {
+            if (e.getWheelRotation() < 0) {
+                sortarray.animSpeed+= 100;
+            } else {
+                if (sortarray.animSpeed - 100 >= 1)    sortarray.animSpeed-= 100;
+                else    sortarray.animSpeed = 1;
+            }
+        }else if(e.isShiftDown()){
+            if (e.getWheelRotation() < 0) {
+                sortarray.animSpeed+= 10;
+            } else {
+                if (sortarray.animSpeed - 10 >= 1)    sortarray.animSpeed-= 10;
+                else    sortarray.animSpeed = 1;
+            }
+        }else{
+            if (e.getWheelRotation() < 0) {
+                sortarray.animSpeed+= 1;
+            } else {
+                if (sortarray.animSpeed - 1 >= 1)    sortarray.animSpeed-= 1;
+            }
+        }
+        speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
     }
 
     @Override
@@ -246,12 +253,13 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             public Void doInBackground() {
                 // Call complicated code here
                 generateArrayBtn.setEnabled(false);     //So that user can't press Generate during any operation
+                jTextField.setEnabled(false);           //So that user can't use it during any operation
 
-                if (jComboBox.getSelectedItem() == "Merge sort"){
-                    speedText.setText( "Speed: " + speedSlider.getValue()*2 + " ms");
+                /*if (jComboBox.getSelectedItem() == "Merge sort"){
+                    speedText.setText( "Speed: " + sortarray.animSpeed*2 + " ms");
                 }
-                else
-                    speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
+                else*/
+                    speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
 
                 if (e.getSource() == startBtn){
                     /*
@@ -270,7 +278,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                         System.out.println("Sort started");
                         statusText.setText("Sorting...");
                         startBtn.setText("Stop");
-                        jComboBox.setEnabled(false);
+                        //jComboBox.setEnabled(false);
 
 
                         //Sort based on the dropdown menu selection
@@ -282,8 +290,11 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                             new SortingAlgorithms().selectionSort(sortarray);
                         }else if (jComboBox.getSelectedItem() == "Merge sort"){
                             new SortingAlgorithms().sortdeMerge(sortarray);
+                        }else if (jComboBox.getSelectedItem() == "Quick sort"){
+                            //new SortingAlgorithms().sortdeMerge(sortarray);
+                        }else if (jComboBox.getSelectedItem() == "Counting sort"){
+                            //new SortingAlgorithms().sortdeMerge(sortarray);
                         }
-
                     }
                 }else if (e.getSource() == generateArrayBtn){
                     try{
@@ -296,7 +307,6 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                             statusText.setText("Generating...");
                             startBtn.setEnabled(false);
                             sortarray.GenerateRandomArray(arraySize);
-                            speedSlider.setValue(sortarray.animSpeed);
 
                             statusText.setText("Unsorted");
                             startBtn.setEnabled(true);
@@ -324,12 +334,13 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             protected void done() {
                 // get() would be available here if you want to use it
 
-                //After the operation is done, reenable the generate button again
+                //After the operation is done, reenable the items again
                 generateArrayBtn.setEnabled(true);
-                jComboBox.setEnabled(true);
+                jTextField.setEnabled(true);
+                //jComboBox.setEnabled(true);
                 startBtn.setText("Start");
                 sortarray.isSorting = false;
-
+                speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
 
                 //Change the status text
                 if (e.getSource() == startBtn){
