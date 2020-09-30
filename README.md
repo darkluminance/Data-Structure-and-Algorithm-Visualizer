@@ -1,7 +1,7 @@
 # Data Structure and Algorithm Visualizer
 ![Build](https://img.shields.io/badge/build-passing-lightgreen.svg) ![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
-###A program made in Java that visualizes common data structures and some common sorting and graph algorithms. This was a group project in 2nd year of my Undergraduate studies
+A program made in Java that visualizes common data structures and some common sorting and graph algorithms. This was a group project in 2nd year of my Undergraduate studies
 
 ## Sorting Algorithms
 ### Bubble Sort
