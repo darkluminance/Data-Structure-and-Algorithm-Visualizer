@@ -1,3 +1,5 @@
+import GraphAlgorithms.GraphVisualizingScreen;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -16,7 +18,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
     JFrame f;
     JPanel panel, btnPanel;
     JLabel statusText, textboxText, comparisonText, slow, fast, speedText;
-    JButton startBtn, generateArrayBtn;
+    JButton startBtn, generateArrayBtn, bottomBtn;
     SortArray sortarray;
     JComboBox<String> jComboBox;
     JTextField jTextField;
@@ -60,6 +62,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         // PROGRAM DOESN'T WORK FOR SOME REASON IF COMMENTED
         f.setLayout(null);
 
+        f.setLocationRelativeTo(null);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Will close when close BUTTON pressed
         f.setResizable(false);      //Resizing will destroy the ratio of grids
 
@@ -189,8 +192,34 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         comparisonText.setFont(new Font(mainFont, Font.PLAIN, 18));
         comparisonText.setForeground(Color.white);
 
+        bottomBtn = new JButton("Button");
+        bottomBtn.setBounds(30, 620, 200,50);
+        bottomBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //f.setVisible(false);
+                f.dispose();
+                new GraphVisualizingScreen();
+                System.out.println("Came here");
+            }
+        });
+        bottomBtn.setBackground(themeColor);
+        bottomBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        bottomBtn.setForeground(Color.white);
+        bottomBtn.setFocusable(false);
+        bottomBtn.setBorder(null);
+        bottomBtn.setVisible(true);
+        //When the button is hovered
+        bottomBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (bottomBtn.isEnabled())
+                    bottomBtn.setBackground(themeColor.darker());
+            }
 
-
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                bottomBtn.setBackground(themeColor);
+            }
+        });
 
         btnPanel.add(jTextField);
         btnPanel.add(generateArrayBtn);
@@ -201,6 +230,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         btnPanel.add(comparisonText);
         btnPanel.add(speedSlider);
         btnPanel.add(speedText);
+        btnPanel.add(bottomBtn);
 
         panel.add(sortarray);
 
@@ -213,7 +243,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
     }
 
     public static void main(String[] args) {
-        AlgorithmVisualizingScreen avs = new AlgorithmVisualizingScreen();
+        //AlgorithmVisualizingScreen avs = new AlgorithmVisualizingScreen();
     }
 
 
