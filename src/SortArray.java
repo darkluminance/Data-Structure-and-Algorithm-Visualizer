@@ -9,7 +9,7 @@ public class SortArray extends JPanel {
     public static final int win_WIDTH = 1000;   //Width of visualizer
 
     public int comparisons = 0;                 //Counts the no of comparisons in sort
-    public int animSpeed = 5;                   //Initial speed of the sorting animation
+    public int animSpeed = 250;                   //Initial speed of the sorting animation
 
     public boolean isSorting = false;
 

@@ -11,7 +11,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
     public Color themeColor  = new Color(110,217,161);
 
-    public int arraySize = 100;
+    public int arraySize = 20;
 
     JFrame f;
     JPanel panel, btnPanel;
