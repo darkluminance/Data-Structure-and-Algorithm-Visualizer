@@ -296,25 +296,28 @@ public class SortingAlgorithms {
         }
     }
     public void mergesort(SortArray arr,int start,int end){
+        arr.barColor[start] = Color.red;
+        arr.barColor[end] = Color.red;
+
+        arr.Update();
+        arr.sleep(arr.animSpeed);
+
+        arr.barColor[start] = arr.blueColor;
+        arr.barColor[end] = arr.pinkColor;
+
+        if (start == end){
+            arr.barColor[start] = new Color(9, 132, 227);
+        }
+
+        arr.Update();
+        arr.sleep(arr.animSpeed);
+
         if(start<end){
             if (!arr.isSorting){
                 return;
             }
 
             int mid=(start+end)/2;      //defines the current array in 2 parts
-
-            arr.barColor[start] = Color.red;
-            arr.barColor[end] = Color.red;
-
-            arr.Update();
-            arr.sleep(arr.animSpeed);
-
-            arr.barColor[start] = arr.blueColor;
-            arr.barColor[end] = arr.pinkColor;
-
-            arr.Update();
-            arr.sleep(arr.animSpeed);
-
 
             mergesort(arr,start,mid);       // sort the 1st part of array
             mergesort(arr,mid+1,end);  // sort the 2nd part of array
@@ -323,17 +326,6 @@ public class SortingAlgorithms {
             mergee(arr,start,mid,end);
 
             arr.Update();
-        }
-        if (start == end){
-            arr.barColor[start] = Color.red;
-
-            arr.Update();
-            arr.sleep(arr.animSpeed);
-
-            arr.barColor[start] = arr.blueColor;
-
-            arr.Update();
-            arr.sleep(arr.animSpeed);
         }
     }
 
