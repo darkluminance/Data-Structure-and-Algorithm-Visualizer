@@ -4,11 +4,15 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class AlgorithmVisualizingScreen implements ActionListener {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int win_WIDTH = 1000;
+
+    public Color themeColor  = new Color(110,217,161);
 
     public int arraySize = 100;
 
@@ -31,6 +35,8 @@ public class AlgorithmVisualizingScreen implements ActionListener {
     public AlgorithmVisualizingScreen(){
         f = new JFrame("Sorting Visualization");
 
+        sortarray = new SortArray(arraySize);
+
         panel = new JPanel();
         panel.setBounds(0,0, win_WIDTH+10, HEIGHT);
         panel.setBackground(Color.darkGray);
@@ -39,7 +45,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         btnPanel = new JPanel();
         btnPanel.setBounds(win_WIDTH+10,0, WIDTH - 10 - win_WIDTH, HEIGHT);
-        btnPanel.setBackground(Color.darkGray);
+        btnPanel.setBackground(sortarray.BGColor);
         btnPanel.setLayout(null);
         btnPanel.setVisible(true);
 
@@ -91,7 +97,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         generateArrayBtn = new JButton("Generate");
         generateArrayBtn.setBounds(30, 170, 200,50);
         generateArrayBtn.addActionListener(this);
-        generateArrayBtn.setBackground(new Color(110,217,161));
+        generateArrayBtn.setBackground(themeColor);
         generateArrayBtn.setFont(new Font("Century Gothic", Font.BOLD, 20));
         generateArrayBtn.setForeground(Color.white);
         generateArrayBtn.setFocusable(false);
@@ -101,18 +107,18 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         generateArrayBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (generateArrayBtn.isEnabled())
-                    generateArrayBtn.setBackground(new Color(91, 170, 129));
+                    generateArrayBtn.setBackground(themeColor.darker());
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                generateArrayBtn.setBackground(new Color(110,217,161));
+                generateArrayBtn.setBackground(themeColor);
             }
         });
 
         startBtn = new JButton("Start");
         startBtn.setBounds(30, 240, 200,50);
         startBtn.addActionListener(this);
-        startBtn.setBackground(new Color(110,217,161));
+        startBtn.setBackground(themeColor);
         startBtn.setFont(new Font("Century Gothic", Font.BOLD, 20));
         startBtn.setForeground(Color.white);
         startBtn.setFocusable(false);
@@ -122,24 +128,34 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         startBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (startBtn.isEnabled())
-                    startBtn.setBackground(new Color(91, 170, 129));
+                    startBtn.setBackground(themeColor.darker());
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                    startBtn.setBackground(new Color(110,217,161));
+                    startBtn.setBackground(themeColor);
             }
         });
 
         jComboBox = new JComboBox<String>(algorithms);
         jComboBox.setBounds(30, 305, 200, 50);
         jComboBox.setFont(new Font("Century Gothic", Font.BOLD, 18));
-        jComboBox.setBackground(new Color(110,217,161));
+        jComboBox.setBackground(themeColor);
         jComboBox.setForeground(Color.white);
         /*jComboBox.setBackground(Color.darkGray);
         //jComboBox.setForeground(new Color(110,217,161));
         jComboBox.setForeground(Color.white);*/
         //jComboBox.setUI(ColorArrowUI.createUI(jComboBox));
-        jComboBox.setRenderer(new MyListCellRenderer());
+        jComboBox.setRenderer(new MyListCellRenderer(themeColor));
+        jComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (jComboBox.getSelectedItem() == "Merge sort"){
+                    speedText.setText( "Speed: " + speedSlider.getValue()*2 + " ms");
+                }
+                else
+                    speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
+            }
+        });
 
         jComboBox.setSelectedIndex(0);
         //jComboBox.setFocusable(false);
@@ -151,13 +167,18 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         speedSlider = new JSlider(1,500);
         speedSlider.setBounds(30, 380, 200, 30);
         speedSlider.setBorder(null);
-        speedSlider.setBackground(new Color(110,217,161));
+        speedSlider.setBackground(themeColor);
         speedSlider.setValue(2);
         speedSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 sortarray.animSpeed = speedSlider.getValue();
-                speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
+
+                if (jComboBox.getSelectedItem() == "Merge sort"){
+                    speedText.setText( "Speed: " + speedSlider.getValue()*2 + " ms");
+                }
+                else
+                    speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
             }
         });
 
@@ -188,7 +209,6 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
 
 
-        sortarray = new SortArray(arraySize);
 
         btnPanel.add(jTextField);
         btnPanel.add(generateArrayBtn);
@@ -227,6 +247,11 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                 // Call complicated code here
                 generateArrayBtn.setEnabled(false);     //So that user can't press Generate during any operation
 
+                if (jComboBox.getSelectedItem() == "Merge sort"){
+                    speedText.setText( "Speed: " + speedSlider.getValue()*2 + " ms");
+                }
+                else
+                    speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
 
                 if (e.getSource() == startBtn){
                     /*
@@ -245,6 +270,8 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                         System.out.println("Sort started");
                         statusText.setText("Sorting...");
                         startBtn.setText("Stop");
+                        jComboBox.setEnabled(false);
+
 
                         //Sort based on the dropdown menu selection
                         if (jComboBox.getSelectedItem() == "Bubble sort"){
@@ -270,7 +297,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                             startBtn.setEnabled(false);
                             sortarray.GenerateRandomArray(arraySize);
                             speedSlider.setValue(sortarray.animSpeed);
-                            speedText.setText( "Speed: " + speedSlider.getValue() + " ms");
+
                             statusText.setText("Unsorted");
                             startBtn.setEnabled(true);
                             comparisonText.setText("");
@@ -299,6 +326,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
                 //After the operation is done, reenable the generate button again
                 generateArrayBtn.setEnabled(true);
+                jComboBox.setEnabled(true);
                 startBtn.setText("Start");
                 sortarray.isSorting = false;
 
@@ -322,20 +350,22 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
 //Custom dropdown menu settings
 class MyListCellRenderer extends DefaultListCellRenderer {
+    public Color themeColor;
 
-    public MyListCellRenderer() {
-        setOpaque(true);    //Not transparent
+    public MyListCellRenderer(Color t) {
+        setOpaque(true);  //Not transparent
+        this.themeColor = t;
     }
 
     public Component getListCellRendererComponent(JList jc, Object val, int idx,
                                                   boolean isSelected, boolean cellHasFocus) {
         setText(val.toString());        //Set the texts to string
         setForeground(Color.white);     //Text color to white
-        jc.setSelectionBackground(new Color(110,217,161));      //Sets the BG of selected item
+        jc.setSelectionBackground(themeColor);      //Sets the BG of selected item
         jc.setSelectionForeground(Color.white);     //Sets the font color of selected item
 
         if (isSelected)
-            setBackground(new Color(110,217,161));      //Sets the BG of hovered item
+            setBackground(themeColor);      //Sets the BG of hovered item
         else
             setBackground(Color.darkGray);      //Sets the BG of non hovered items
         return this;
