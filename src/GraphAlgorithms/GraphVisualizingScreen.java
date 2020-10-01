@@ -18,8 +18,16 @@ public class GraphVisualizingScreen {
 
     JFrame f;
     JPanel p,bp;
-    JButton sBtn, rBtn;
+    JButton sBtn, rBtn, stBtn;
+    JLabel statusText, speedText, speedSlider, instructionText;
+    JComboBox<String> algorithmSelection;
     GraphVisualize gv;
+
+    String[] algorithms = {
+            "Depth First Search",
+            "Breadth First Search (Not added)",
+            "Dijkstra (Not added)",
+    };
 
     public Point mousePos;
 
@@ -86,6 +94,34 @@ public class GraphVisualizingScreen {
                 gv.mPos = new Point(0,0);
             }
         });
+        p.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.isControlDown())
+                {
+                    if (e.getWheelRotation() < 0) {
+                        gv.getAnimSpeed+= 100;
+                    } else {
+                        if (gv.getAnimSpeed - 100 >= 1)    gv.getAnimSpeed-= 100;
+                        else    gv.getAnimSpeed = 1;
+                    }
+                }else if(e.isShiftDown()){
+                    if (e.getWheelRotation() < 0) {
+                        gv.getAnimSpeed+= 10;
+                    } else {
+                        if (gv.getAnimSpeed - 10 >= 1)    gv.getAnimSpeed-= 10;
+                        else    gv.getAnimSpeed = 1;
+                    }
+                }else{
+                    if (e.getWheelRotation() < 0) {
+                        gv.getAnimSpeed+= 1;
+                    } else {
+                        if (gv.getAnimSpeed - 1 >= 1)    gv.getAnimSpeed-= 1;
+                    }
+                }
+                speedText.setText( "Speed: " + gv.getAnimSpeed + " ms");
+            }
+        });
 
         bp = new JPanel();
         bp.setBounds(gridWIDTH,0,WIDTH-gridWIDTH, HEIGHT);
@@ -93,25 +129,132 @@ public class GraphVisualizingScreen {
         bp.setLayout(null);
         bp.setVisible(true);
 
-        sBtn = new JButton("Start");
-        sBtn.setBounds((WIDTH-gridWIDTH -180)/2, 50, 180,50);
-        sBtn.addActionListener(new ActionListener() {
+        instructionText = new JLabel("<html>Hold the Alt key and click on a point to set the target point<br>" +
+                "Click while holding Shift key to set the source point<br>" +
+                "Use the left and right mouse button to add and remove obstacles</html>");
+        instructionText.setBounds((WIDTH-gridWIDTH -180)/2, 8, 180, 150);
+        instructionText.setFont(new Font(mainFont, Font.PLAIN, 13));
+        instructionText.setForeground(Color.white);
+
+        statusText = new JLabel("<html>Press Start to start pathfinding</html>");
+        statusText.setBounds((WIDTH-gridWIDTH -180)/2, 150, 180, 80);
+        statusText.setFont(new Font(mainFont, Font.BOLD, 18));
+        statusText.setForeground(Color.white);
+
+        stBtn = new JButton("Start");
+        stBtn.setBounds((WIDTH-gridWIDTH -180)/2, 235, 180,50);
+        stBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sBtn.setEnabled(false);
                 rBtn.setEnabled(false);
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     public Void doInBackground() {
-                        new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                        if (gv.willFind){
+                            System.out.println("Stopped");
+                            rBtn.setEnabled(true);
+                            if (gv.status){
+                                statusText.setText("Path found");
+                                stBtn.setText("Start");
+                            }else{
+                                statusText.setText("No path found");
+                                stBtn.setText("Start");
+                            }
+                            gv.willFind = false;
+                        }else
+                        {
+                            statusText.setText("Pathfinding...");
+                            gv.willAnimate = false;
+                            gv.willFind = true;
+                            new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                            gv.willFind = false;
+                        }
+
 
                         return null;
                     }
                     @Override
                     protected void done() {
                         System.out.println("Done");
-                        sBtn.setEnabled(true);
                         rBtn.setEnabled(true);
+                        if (gv.status){
+                            statusText.setText("Path found");
+                            stBtn.setText("Start");
+                        }else{
+                            statusText.setText("No path found");
+                            stBtn.setText("Start");
+                        }
+                    }
+                };
+                worker.execute();
+
+
+
+
+            }
+        });
+        stBtn.setBackground(themeColor);
+        stBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        stBtn.setForeground(Color.white);
+        stBtn.setFocusable(false);
+        stBtn.setBorder(null);
+        stBtn.setVisible(true);
+        //When the button is hovered
+        stBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (stBtn.isEnabled())
+                    stBtn.setBackground(themeColor.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                stBtn.setBackground(themeColor);
+            }
+        });
+
+        sBtn = new JButton("Animate");
+        sBtn.setBounds((WIDTH-gridWIDTH -180)/2, 300, 180,50);
+        sBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rBtn.setEnabled(false);
+                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                    @Override
+                    public Void doInBackground() {
+                        if (gv.willFind){
+                            System.out.println("Stopped");
+                            rBtn.setEnabled(true);
+                            if (gv.status){
+                                statusText.setText("Path found");
+                                sBtn.setText("Animate");
+                            }else{
+                                statusText.setText("No path found");
+                                sBtn.setText("Animate");
+                            }
+                            gv.willFind = false;
+                        }else
+                        {
+                            statusText.setText("Pathfinding...");
+                            sBtn.setText("Stop");
+                            gv.willAnimate = true;
+                            gv.willFind = true;
+                            new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                            gv.willFind = false;
+                        }
+
+
+                        return null;
+                    }
+                    @Override
+                    protected void done() {
+                        System.out.println("Done");
+                        rBtn.setEnabled(true);
+                        if (gv.status){
+                            statusText.setText("Path found");
+                            sBtn.setText("Animate");
+                        }else{
+                            statusText.setText("No path found");
+                            sBtn.setText("Animate");
+                        }
                     }
                 };
                     worker.execute();
@@ -140,7 +283,7 @@ public class GraphVisualizingScreen {
         });
 
         rBtn = new JButton("Reset");
-        rBtn.setBounds((WIDTH-gridWIDTH -180)/2, 120, 180,50);
+        rBtn.setBounds((WIDTH-gridWIDTH -180)/2, 365, 180,50);
         rBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,6 +299,8 @@ public class GraphVisualizingScreen {
                     @Override
                     protected void done() {
                         System.out.println("Done");
+                        statusText.setText("<html>Press Start to start pathfinding</html>");
+                        sBtn.setText("Animate");
                         sBtn.setEnabled(true);
                         rBtn.setEnabled(true);
                     }
@@ -181,10 +326,37 @@ public class GraphVisualizingScreen {
             }
         });
 
+        algorithmSelection = new JComboBox<String>(algorithms);
+        algorithmSelection.setBounds((WIDTH-gridWIDTH -180)/2, 430, 180, 50);
+        algorithmSelection.setFont(new Font(mainFont, Font.BOLD, 15));
+        algorithmSelection.setBackground(themeColor);
+        algorithmSelection.setForeground(Color.white);
+        algorithmSelection.setRenderer(new MyListCellRenderer(themeColor));
+
+        algorithmSelection.setSelectedIndex(0);
+        algorithmSelection.setVisible(true);
 
 
+
+        speedSlider = new JLabel("<html>Use the mouse scroll wheel to change the animation delay.<br>" +
+                " Use the Ctrl or Shift keys along with the scroll wheel to change by bigger amount.</html>");
+        speedSlider.setBounds((WIDTH-gridWIDTH -180)/2, 500, 180, 120);
+        speedSlider.setFont(new Font(mainFont, Font.PLAIN, 13));
+        speedSlider.setForeground(Color.white);
+
+        speedText = new JLabel( "Speed: " + gv.getAnimSpeed + " ms");
+        speedText.setBounds((WIDTH-gridWIDTH -180)/2, 615, 180, 50);
+        speedText.setFont(new Font(mainFont, Font.PLAIN, 18));
+        speedText.setForeground(Color.white);
+
+        bp.add(instructionText);
+        bp.add(statusText);
+        bp.add(stBtn);
         bp.add(sBtn);
         bp.add(rBtn);
+        bp.add(algorithmSelection);
+        bp.add(speedSlider);
+        bp.add(speedText);
 
 
         f.add(p);
@@ -219,5 +391,28 @@ public class GraphVisualizingScreen {
             gv.mPos = mousePos;
             gv.Update();
         }
+    }
+}
+//Custom dropdown menu settings
+class MyListCellRenderer extends DefaultListCellRenderer {
+    public Color themeColor;
+
+    public MyListCellRenderer(Color t) {
+        setOpaque(true);  //Not transparent
+        this.themeColor = t;
+    }
+
+    public Component getListCellRendererComponent(JList jc, Object val, int idx,
+                                                  boolean isSelected, boolean cellHasFocus) {
+        setText(val.toString());        //Set the texts to string
+        setForeground(Color.white);     //Text color to white
+        jc.setSelectionBackground(themeColor);      //Sets the BG of selected item
+        jc.setSelectionForeground(Color.white);     //Sets the font color of selected item
+
+        if (isSelected)
+            setBackground(themeColor);      //Sets the BG of hovered item
+        else
+            setBackground(Color.darkGray);      //Sets the BG of non hovered items
+        return this;
     }
 }

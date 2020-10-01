@@ -16,15 +16,17 @@ public class GraphVisualize extends JPanel {
     public static final int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
 
     public int iterations = 0;                  //Counts the no of iterations in path-finding
-    public int animSpeed = 1;                   //Amount of delay in animation
     public int sourceX = 1;
     public int sourceY = 1;
     public int targetX = gridCols-2;
     public int targetY = gridRows-2;
     public int clickState = 0;
     public int place = 0;
+    public int getAnimSpeed = 15;
 
     public boolean status;
+    public boolean willFind = false;
+    public boolean willAnimate = true;
 
     public Point mPos = new Point(0,0);
 
@@ -39,8 +41,8 @@ public class GraphVisualize extends JPanel {
     //1 = obstacle
     //2 = start point
     //3 = path
-    //5-~ = visited
     //4 = target
+    //5 = visited
     public GraphVisualize(){
         drawGrid();
     }
@@ -112,12 +114,19 @@ public class GraphVisualize extends JPanel {
                 }else if (grid[i][j] == 3){
                     graphics.setColor(Color.yellow);
                 }else if (grid[i][j] == 4){
-                    graphics.setColor(Color.red);
+                    graphics.setColor(Color.magenta);
                 }else if (grid[i][j] == 5){
-                    int area = 650;
+                    int area = 380;
                     float p = (float) level[i][j];
                     float a = (float) area;
                     float part = p/a * 255 ;
+                    if (part >= 255){
+                        part = 255 + 255 - part;
+                    }
+                    if (part <= 0){
+                        part = -part;
+                    }
+
                     Color c = new Color(Math.round(part), 255-Math.round(part), 255-Math.round(part));
                     graphics.setColor(c);
                 }
