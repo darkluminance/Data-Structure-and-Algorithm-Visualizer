@@ -15,3 +15,8 @@ A program made in Java that visualizes common data structures and some common so
 
 ### Merge Sort
 ![Merge Sort](demos/mergesort.gif)
+
+
+## Graph Algorithms
+### Depth First Search
+![Depth First Search](demos/dfs.gif)
