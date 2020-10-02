@@ -12,7 +12,8 @@ public class DepthFirstSearch {
     public DepthFirstSearch(GraphVisualize g, Point source){
         g.whichAlgorithm = "dfs";
         g.status = DFS(g, source.x, source.y, path);
-
+        System.out.println(g.iterations);
+        System.out.println(g.pathPlace);
         g.Update();
     }
 
@@ -24,6 +25,7 @@ public class DepthFirstSearch {
             return false;
         }
 
+        g.iterations++;
             //g.grid[y][x] = 69;
 
 
@@ -31,6 +33,7 @@ public class DepthFirstSearch {
         //Reached the target
         if (g.grid[y][x] == 4){
             path.add(x);    path.add(y);
+            g.iterations++;
             if (g.willAnimate)
                 g.sleep(280);
             return true;

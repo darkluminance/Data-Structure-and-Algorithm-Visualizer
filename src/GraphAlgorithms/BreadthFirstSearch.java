@@ -33,6 +33,7 @@ public class BreadthFirstSearch {
                 if (g.willAnimate)
                     g.sleep(20);
             }
+            g.pathPlace = path.size() - 1;
 
         }
 
@@ -57,21 +58,23 @@ public class BreadthFirstSearch {
         dist[g.sourceY][g.sourceX] = 0;
 
         while (!q.isEmpty()){
+            if (g.willFind == false) {
+                return false;
+            }
+            g.iterations++;
             //Pop the first item of the queue since its neighbours are visited
             Point v = q.remove();
+            g.grid[v.y][v.x] = 5;
             g.place++;
             if (g.grid[v.y][v.x] == 0)
                 g.level[v.y][v.x] = g.place;
-
-
-
 
 
             //Visiting all the neighbours of the current point
 
             //top
             if (g.grid[v.y-1][v.x] == 0){
-                g.grid[v.y-1][v.x] = 5;
+                g.grid[v.y-1][v.x] = 69;
                 dist[v.y-1][v.x] = dist[v.y][v.x] + 1;
                 prev[v.y-1][v.x] = new Point(v.x, v.y);
                 q.add(new Point(v.x, v.y-1));
@@ -80,7 +83,7 @@ public class BreadthFirstSearch {
 
             //right
             if (g.grid[v.y][v.x+1] == 0){
-                g.grid[v.y][v.x+1] = 5;
+                g.grid[v.y][v.x+1] = 69;
                 dist[v.y][v.x+1] = dist[v.y][v.x] + 1;
                 prev[v.y][v.x+1] = new Point(v.x, v.y);
                 q.add(new Point(v.x+1, v.y));
@@ -89,7 +92,7 @@ public class BreadthFirstSearch {
 
             //bottom
             if (g.grid[v.y+1][v.x] == 0){
-                g.grid[v.y+1][v.x] = 5;
+                g.grid[v.y+1][v.x] = 69;
                 dist[v.y+1][v.x] = dist[v.y][v.x] + 1;
                 prev[v.y+1][v.x] = new Point(v.x, v.y);
                 q.add(new Point(v.x, v.y+1));
@@ -98,7 +101,7 @@ public class BreadthFirstSearch {
 
             //left
             if (g.grid[v.y][v.x-1] == 0){
-                g.grid[v.y][v.x-1] = 5;
+                g.grid[v.y][v.x-1] = 69;
                 dist[v.y][v.x-1] = dist[v.y][v.x] + 1;
                 prev[v.y][v.x-1] = new Point(v.x, v.y);
                 q.add(new Point(v.x-1, v.y));
@@ -107,20 +110,25 @@ public class BreadthFirstSearch {
 
             //If reached the target
             if (v.x == g.targetX && v.y == g.targetY){
+                g.iterations++;
                 return true;
             }else if (v.x+1 == g.targetX && v.y == g.targetY){
+                g.iterations++;
                 dist[v.y][v.x+1] = dist[v.y][v.x] + 1;
                 prev[v.y][v.x+1] = new Point(v.x, v.y);
                 return true;
             }else if (v.x-1 == g.targetX && v.y == g.targetY){
+                g.iterations++;
                 dist[v.y][v.x-1] = dist[v.y][v.x] + 1;
                 prev[v.y][v.x-1] = new Point(v.x, v.y);
                 return true;
             }else if (v.x == g.targetX && v.y-1 == g.targetY){
+                g.iterations++;
                 dist[v.y-1][v.x] = dist[v.y][v.x] + 1;
                 prev[v.y-1][v.x] = new Point(v.x, v.y);
                 return true;
             }else if (v.x == g.targetX && v.y+1 == g.targetY){
+                g.iterations++;
                 dist[v.y+1][v.x] = dist[v.y][v.x] + 1;
                 prev[v.y+1][v.x] = new Point(v.x, v.y);
                 return true;

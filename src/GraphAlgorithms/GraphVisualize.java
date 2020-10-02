@@ -12,16 +12,16 @@ public class GraphVisualize extends JPanel {
     public static final int HEIGHT = 728;       //Height of screen
     public static final int win_WIDTH = 1000;   //Width of visualizer
     public static final int gridWIDTH = 990;    //Width of grid
-    public static final int gridHEIGHT = 690;   //Height of grid
+    public static final int gridHEIGHT = 630;   //Height of grid
     public static final int gridSIZE = 30;      //Size of each grid
     public static final int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
     public static final int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
 
     public int iterations = 0;                  //Counts the no of iterations in path-finding
     public int sourceX = 1;
-    public int sourceY = 1;
+    public int sourceY = gridRows/2;
     public int targetX = gridCols-2;
-    public int targetY = gridRows-2;
+    public int targetY = gridRows/2;
     public int clickState = 0;
     public int place = 0;
     public int pathPlace = 0;
@@ -70,6 +70,7 @@ public class GraphVisualize extends JPanel {
             }
         }
         place = 0;
+        iterations = 0;
 
         Update();
     }
@@ -129,11 +130,11 @@ public class GraphVisualize extends JPanel {
                 }else if (grid[i][j] == 4){
                     graphics.setColor(Color.magenta);
                 }else if (grid[i][j] == 5){
-                    int area = 380;
+                    int area = 300;
                     if (whichAlgorithm == "dfs"){
-                        area = 380;
+                        area = 300;
                     }else if (whichAlgorithm == "bfs"){
-                        area = 180;
+                        area = 100;
                     }
                     float p = (float) level[i][j];
                     float a = (float) area;
@@ -158,6 +159,9 @@ public class GraphVisualize extends JPanel {
                     if(i == current.y && j == current.x){
                         graphics.setColor(new Color(9, 132, 227));
                     }
+                    if (grid[i][j] == 69){
+                        graphics.setColor(new Color(9, 132, 227));
+                    }
 
                 }
                 if (i == 0 && j == 0){
@@ -168,7 +172,7 @@ public class GraphVisualize extends JPanel {
                 graphics.fillRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
                 graphics.setColor(BGColor.darker());
                 graphics.drawRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
-                if (grid[i][j] == 2 || grid[i][j] == 5 || grid[i][j] == 3){
+                if (grid[i][j] == 2 || grid[i][j] == 5 || grid[i][j] == 3 || grid[i][j] == 69){
                     graphics.setColor(Color.black);
                     g.setFont(new Font("Century Gothic", Font.PLAIN, 8));
                     graphics.drawString(Integer.toString(level[i][j]), (gridSIZE*j)+startX+2,(gridSIZE*i)+startY+28);

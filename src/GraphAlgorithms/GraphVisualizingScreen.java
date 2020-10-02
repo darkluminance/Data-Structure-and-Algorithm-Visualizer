@@ -9,7 +9,7 @@ public class GraphVisualizingScreen {
     public static final int HEIGHT = 728;
     public static final int win_WIDTH = 1000;
     public static final int gridWIDTH = 990;    //Width of grid
-    public static final int gridHEIGHT = 690;   //Height of grid
+    public static final int gridHEIGHT = 630;   //Height of grid
     public static final int gridSIZE = 30;      //Size of each grid
     public static final int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
     public static final int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
@@ -17,15 +17,16 @@ public class GraphVisualizingScreen {
     public Color themeColor  = new Color(110,217,161);
 
     JFrame f;
-    JPanel p,bp;
+    JPanel p,bp, pp;
     JButton sBtn, rBtn, stBtn;
     JLabel statusText, speedText, speedSlider, instructionText;
+    JLabel iterationText, pathLengthText;
     JComboBox<String> algorithmSelection;
     GraphVisualize gv;
 
     String[] algorithms = {
-            "Depth First Search",
             "Breadth First Search",
+            "Depth First Search",
             "Dijkstra (Not added)",
     };
 
@@ -43,8 +44,26 @@ public class GraphVisualizingScreen {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Will close when close BUTTON pressed
         f.setResizable(false);
 
+
+        pp = new JPanel();
+        pp.setBounds(0,gridHEIGHT, gridWIDTH, HEIGHT-gridHEIGHT);
+        pp.setBackground(Color.darkGray);
+        pp.setLayout(null);
+        pp.setVisible(true);
+
+
+        iterationText = new JLabel("");
+        iterationText.setBounds(25, 5, 180, 50);
+        iterationText.setFont(new Font(mainFont, Font.BOLD, 18));
+        iterationText.setForeground(Color.white);
+
+        pathLengthText = new JLabel("");
+        pathLengthText.setBounds(200, 5, 180, 50);
+        pathLengthText.setFont(new Font(mainFont, Font.BOLD, 18));
+        pathLengthText.setForeground(Color.white);
+
         p = new JPanel();
-        p.setBounds(0,0,gridWIDTH, HEIGHT);
+        p.setBounds(0,0,gridWIDTH, gridHEIGHT);
         p.setLayout((new GridLayout(1,1 )));
         p.add(gv);
         p.setVisible(true);
@@ -129,6 +148,7 @@ public class GraphVisualizingScreen {
         bp.setLayout(null);
         bp.setVisible(true);
 
+
         instructionText = new JLabel("<html>Hold the Alt key and click on a point to set the target point<br>" +
                 "Click while holding Shift key to set the source point<br>" +
                 "Use the left and right mouse button to add and remove obstacles</html>");
@@ -166,11 +186,17 @@ public class GraphVisualizingScreen {
                             statusText.setText("Pathfinding...");
                             gv.willAnimate = false;
                             gv.willFind = true;
-                            new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                            gv.iterations = 0;
+                            gv.pathPlace = 0;
+                            iterationText.setText("");
+                            pathLengthText.setText("");
+                            if (algorithmSelection.getSelectedItem() == "Depth First Search"){
+                                new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                            }else if (algorithmSelection.getSelectedItem() == "Breadth First Search"){
+                                new BreadthFirstSearch(gv);
+                            }
                             gv.willFind = false;
                         }
-
-
                         return null;
                     }
                     @Override
@@ -179,18 +205,17 @@ public class GraphVisualizingScreen {
                         rBtn.setEnabled(true);
                         if (gv.status){
                             statusText.setText("Path found");
+                            iterationText.setText("Iterations: " + gv.iterations);
+                            pathLengthText.setText("Path length: " + gv.pathPlace);
                             stBtn.setText("Find");
                         }else{
                             statusText.setText("No path found");
+                            iterationText.setText("Iterations: " + gv.iterations);
                             stBtn.setText("Find");
                         }
                     }
                 };
                 worker.execute();
-
-
-
-
             }
         });
         stBtn.setBackground(themeColor);
@@ -211,6 +236,9 @@ public class GraphVisualizingScreen {
             }
         });
 
+
+
+
         sBtn = new JButton("Animate");
         sBtn.setBounds((WIDTH-gridWIDTH -180)/2, 300, 180,50);
         sBtn.addActionListener(new ActionListener() {
@@ -225,9 +253,12 @@ public class GraphVisualizingScreen {
                             rBtn.setEnabled(true);
                             if (gv.status){
                                 statusText.setText("Path found");
+                                iterationText.setText("Iterations: " + gv.iterations);
+                                pathLengthText.setText("Path length: " + gv.pathPlace);
                                 sBtn.setText("Animate");
                             }else{
                                 statusText.setText("No path found");
+                                iterationText.setText("Iterations: " + gv.iterations);
                                 sBtn.setText("Animate");
                             }
                             gv.willFind = false;
@@ -237,11 +268,16 @@ public class GraphVisualizingScreen {
                             sBtn.setText("Stop");
                             gv.willAnimate = true;
                             gv.willFind = true;
+                            gv.iterations = 0;
+                            gv.pathPlace = 0;
+                            iterationText.setText("");
+                            pathLengthText.setText("");
                             if (algorithmSelection.getSelectedItem() == "Depth First Search"){
                                 new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
                             }else if (algorithmSelection.getSelectedItem() == "Breadth First Search"){
                                 new BreadthFirstSearch(gv);
                             }
+
 
                             gv.willFind = false;
                         }
@@ -255,9 +291,12 @@ public class GraphVisualizingScreen {
                         rBtn.setEnabled(true);
                         if (gv.status){
                             statusText.setText("Path found");
+                            iterationText.setText("Iterations: " + gv.iterations);
+                            pathLengthText.setText("Path length: " + gv.pathPlace);
                             sBtn.setText("Animate");
                         }else{
                             statusText.setText("No path found");
+                            iterationText.setText("Iterations: " + gv.iterations);
                             sBtn.setText("Animate");
                         }
                     }
@@ -290,8 +329,13 @@ public class GraphVisualizingScreen {
         rBtn = new JButton("Reset");
         rBtn.setBounds((WIDTH-gridWIDTH -180)/2, 365, 180,50);
         rBtn.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                gv.iterations = 0;
+                gv.pathPlace = 0;
+                iterationText.setText("");
+                pathLengthText.setText("");
                 sBtn.setEnabled(false);
                 rBtn.setEnabled(false);
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -363,9 +407,13 @@ public class GraphVisualizingScreen {
         bp.add(speedSlider);
         bp.add(speedText);
 
+        pp.add(iterationText);
+        pp.add(pathLengthText);
+
 
         f.add(p);
         f.add(bp);
+        f.add(pp);
 
         f.setVisible(true);
 
@@ -377,7 +425,7 @@ public class GraphVisualizingScreen {
 
     public void gridPaint(MouseEvent e){
         if (e.getPoint().x >= 32 && e.getPoint().y >= 32 &&
-                e.getPoint().x <= 958 && e.getPoint().y <= 658){
+                e.getPoint().x <= 958 && e.getPoint().y <= 598){
             if (e.getButton() == MouseEvent.BUTTON1 && e.isShiftDown()) gv.clickState = 2;
             else if (e.getButton() == MouseEvent.BUTTON1 && e.isAltDown()) gv.clickState = 4;
             else if (e.getButton() == MouseEvent.BUTTON1) gv.clickState = 1;
