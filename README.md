@@ -20,3 +20,6 @@ A program made in Java that visualizes common data structures and some common so
 ## Graph Algorithms
 ### Depth First Search
 ![Depth First Search](demos/dfs.gif)
+
+### Breadth First Search
+![Breadth First Search](demos/bfs.gif)

@@ -10,6 +10,7 @@ public class DepthFirstSearch {
 
 
     public DepthFirstSearch(GraphVisualize g, Point source){
+        g.whichAlgorithm = "dfs";
         g.status = DFS(g, source.x, source.y, path);
 
         g.Update();
@@ -22,12 +23,24 @@ public class DepthFirstSearch {
         if(x<1 || x>= g.grid[0].length - 1 ||y<1 || y>= g.grid.length - 1 ){
             return false;
         }
+
+            //g.grid[y][x] = 69;
+
+
+
         //Reached the target
         if (g.grid[y][x] == 4){
             path.add(x);    path.add(y);
             if (g.willAnimate)
                 g.sleep(280);
             return true;
+        }
+        if (g.grid[y][y] != 1 && g.grid[y][y] != 4 && g.grid[y][y] != 2){
+            g.current.x = x;
+            g.current.y = y;
+            g.Update();
+            if (g.willAnimate)
+                g.sleep(g.getAnimSpeed);
         }
         /*if (g.grid[y][x] == 2) {
             g.grid[y][x] = -1;
@@ -39,7 +52,9 @@ public class DepthFirstSearch {
             return false;
         }*/
 
-        if (g.grid[y][x] == 0 || g.grid[y][x] == 2){
+
+
+        if (g.grid[y][x] == 0 || g.grid[y][x] == 2 || g.grid[y][x] == 69){
             if (g.grid[y][x] == 0)
             {
                 g.grid[y][x] = 5;
@@ -48,24 +63,31 @@ public class DepthFirstSearch {
                     g.level[y][x] = g.place;
                 }
 
+            }else if(g.grid[y][x] == 69){
+                g.grid[y][x] = 5;
             }
+
 
             g.Update();
             if (g.willAnimate)
                 g.sleep(g.getAnimSpeed);
 
 
-            if (DFS(g, x+1, y, path)){
+            if (DFS(g, x, y-1, path)){
                 path.add(x);    path.add(y);
                 g.grid[y][x] = 3;
+                g.pathPlace++;
+                g.pathPos.put(new Point(y, x), g.pathPlace);
                 g.Update();
                 if (g.willAnimate)
                     g.sleep(15);
                 return true;
             }
-            if (DFS(g, x-1, y, path)){
+            if (DFS(g, x+1, y, path)){
                 path.add(x);    path.add(y);
                 g.grid[y][x] = 3;
+                g.pathPlace++;
+                g.pathPos.put(new Point(y, x), g.pathPlace);
                 g.Update();
                 if (g.willAnimate)
                     g.sleep(15);
@@ -74,14 +96,18 @@ public class DepthFirstSearch {
             if (DFS(g, x, y+1, path)){
                 path.add(x);    path.add(y);
                 g.grid[y][x] = 3;
+                g.pathPlace++;
+                g.pathPos.put(new Point(y, x), g.pathPlace);
                 g.Update();
                 if (g.willAnimate)
                     g.sleep(15);
                 return true;
             }
-            if (DFS(g, x, y-1, path)){
+            if (DFS(g, x-1, y, path)){
                 path.add(x);    path.add(y);
                 g.grid[y][x] = 3;
+                g.pathPlace++;
+                g.pathPos.put(new Point(y, x), g.pathPlace);
                 g.Update();
                 if (g.willAnimate)
                     g.sleep(15);
@@ -90,9 +116,5 @@ public class DepthFirstSearch {
 
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-
     }
 }

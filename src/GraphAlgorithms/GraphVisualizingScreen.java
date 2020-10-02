@@ -25,7 +25,7 @@ public class GraphVisualizingScreen {
 
     String[] algorithms = {
             "Depth First Search",
-            "Breadth First Search (Not added)",
+            "Breadth First Search",
             "Dijkstra (Not added)",
     };
 
@@ -136,12 +136,12 @@ public class GraphVisualizingScreen {
         instructionText.setFont(new Font(mainFont, Font.PLAIN, 13));
         instructionText.setForeground(Color.white);
 
-        statusText = new JLabel("<html>Press Start to start pathfinding</html>");
+        statusText = new JLabel("<html>Press Find to start pathfinding</html>");
         statusText.setBounds((WIDTH-gridWIDTH -180)/2, 150, 180, 80);
         statusText.setFont(new Font(mainFont, Font.BOLD, 18));
         statusText.setForeground(Color.white);
 
-        stBtn = new JButton("Start");
+        stBtn = new JButton("Find");
         stBtn.setBounds((WIDTH-gridWIDTH -180)/2, 235, 180,50);
         stBtn.addActionListener(new ActionListener() {
             @Override
@@ -155,10 +155,10 @@ public class GraphVisualizingScreen {
                             rBtn.setEnabled(true);
                             if (gv.status){
                                 statusText.setText("Path found");
-                                stBtn.setText("Start");
+                                stBtn.setText("Find");
                             }else{
                                 statusText.setText("No path found");
-                                stBtn.setText("Start");
+                                stBtn.setText("Find");
                             }
                             gv.willFind = false;
                         }else
@@ -179,10 +179,10 @@ public class GraphVisualizingScreen {
                         rBtn.setEnabled(true);
                         if (gv.status){
                             statusText.setText("Path found");
-                            stBtn.setText("Start");
+                            stBtn.setText("Find");
                         }else{
                             statusText.setText("No path found");
-                            stBtn.setText("Start");
+                            stBtn.setText("Find");
                         }
                     }
                 };
@@ -237,7 +237,12 @@ public class GraphVisualizingScreen {
                             sBtn.setText("Stop");
                             gv.willAnimate = true;
                             gv.willFind = true;
-                            new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                            if (algorithmSelection.getSelectedItem() == "Depth First Search"){
+                                new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
+                            }else if (algorithmSelection.getSelectedItem() == "Breadth First Search"){
+                                new BreadthFirstSearch(gv);
+                            }
+
                             gv.willFind = false;
                         }
 
@@ -299,7 +304,7 @@ public class GraphVisualizingScreen {
                     @Override
                     protected void done() {
                         System.out.println("Done");
-                        statusText.setText("<html>Press Start to start pathfinding</html>");
+                        statusText.setText("<html>Press Find to start pathfinding</html>");
                         sBtn.setText("Animate");
                         sBtn.setEnabled(true);
                         rBtn.setEnabled(true);

@@ -3,11 +3,13 @@ package GraphAlgorithms;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 public class GraphVisualize extends JPanel {
     public static final int WIDTH = 1280;       //Width of screen
-    public static final int HEIGHT = 720;       //Height of screen
+    public static final int HEIGHT = 728;       //Height of screen
     public static final int win_WIDTH = 1000;   //Width of visualizer
     public static final int gridWIDTH = 990;    //Width of grid
     public static final int gridHEIGHT = 690;   //Height of grid
@@ -22,6 +24,7 @@ public class GraphVisualize extends JPanel {
     public int targetY = gridRows-2;
     public int clickState = 0;
     public int place = 0;
+    public int pathPlace = 0;
     public int getAnimSpeed = 15;
 
     public boolean status;
@@ -29,11 +32,16 @@ public class GraphVisualize extends JPanel {
     public boolean willAnimate = true;
 
     public Point mPos = new Point(0,0);
+    public Point current = new Point(0,0);
 
     public Color BGColor  = Color.darkGray;
 
     public int[][] grid = new int[gridRows][gridCols];
     public int[][] level = new int[gridRows][gridCols];
+
+    public Dictionary pathPos = new Hashtable();
+
+    public String whichAlgorithm = "";
 
     List<Integer> patto = new ArrayList<Integer>();
     //-1 = visited start point
@@ -43,11 +51,16 @@ public class GraphVisualize extends JPanel {
     //3 = path
     //4 = target
     //5 = visited
+    //69= visiting
     public GraphVisualize(){
         drawGrid();
     }
 
     public void drawGrid(){
+        current = new Point(0,0);
+        pathPos = new Hashtable();
+        pathPlace = 0;
+
         for (int i = 0; i<gridRows; i++){
             for (int j = 0; j<gridCols; j++){
                 grid[i][j] = 0;
@@ -117,9 +130,20 @@ public class GraphVisualize extends JPanel {
                     graphics.setColor(Color.magenta);
                 }else if (grid[i][j] == 5){
                     int area = 380;
+                    if (whichAlgorithm == "dfs"){
+                        area = 380;
+                    }else if (whichAlgorithm == "bfs"){
+                        area = 180;
+                    }
                     float p = (float) level[i][j];
                     float a = (float) area;
                     float part = p/a * 255 ;
+                    if (part >= 255){
+                        part = 255 + 255 - part;
+                    }
+                    if (part <= 0){
+                        part = -part;
+                    }
                     if (part >= 255){
                         part = 255 + 255 - part;
                     }
@@ -130,6 +154,12 @@ public class GraphVisualize extends JPanel {
                     Color c = new Color(Math.round(part), 255-Math.round(part), 255-Math.round(part));
                     graphics.setColor(c);
                 }
+                if(i != 0 && j != 0 && grid[i][j] != 1 && grid[i][j] != 3  && grid[i][j] != 4){
+                    if(i == current.y && j == current.x){
+                        graphics.setColor(new Color(9, 132, 227));
+                    }
+
+                }
                 if (i == 0 && j == 0){
                     graphics.setColor(Color.black);
                 }
@@ -138,9 +168,19 @@ public class GraphVisualize extends JPanel {
                 graphics.fillRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
                 graphics.setColor(BGColor.darker());
                 graphics.drawRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
-                if (level[i][j]>0 || grid[i][j] == 2){
+                if (grid[i][j] == 2 || grid[i][j] == 5 || grid[i][j] == 3){
                     graphics.setColor(Color.black);
-                    graphics.drawString(Integer.toString(level[i][j]), (gridSIZE*j)+startX+3,(gridSIZE*i)+startY+12);
+                    g.setFont(new Font("Century Gothic", Font.PLAIN, 8));
+                    graphics.drawString(Integer.toString(level[i][j]), (gridSIZE*j)+startX+2,(gridSIZE*i)+startY+28);
+                }
+                if (grid[i][j] == 3){
+                    if (!pathPos.isEmpty()){
+                        String pp = pathPos.get(new Point(i, j)).toString();
+                        graphics.setColor(Color.red);
+                        g.setFont(new Font("Century Gothic", Font.BOLD, 14));
+                        graphics.drawString(pp, (gridSIZE*j)+startX+1,(gridSIZE*i)+startY+13);
+                    }
+
                 }
 
 
