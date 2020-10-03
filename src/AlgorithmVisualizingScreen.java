@@ -243,7 +243,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
     }
 
     public static void main(String[] args) {
-        //AlgorithmVisualizingScreen avs = new AlgorithmVisualizingScreen();
+        AlgorithmVisualizingScreen avs = new AlgorithmVisualizingScreen();
     }
 
 
