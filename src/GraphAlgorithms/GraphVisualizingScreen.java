@@ -15,6 +15,8 @@ public class GraphVisualizingScreen {
     public static final int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
 
     public Color themeColor  = new Color(110,217,161);
+    public Color bgColor  = Color.darkGray;
+    //public Color themeColor  = bgColor.darker();
 
     JFrame f;
     JPanel p,bp, pp;
@@ -44,12 +46,13 @@ public class GraphVisualizingScreen {
         f.setLocationRelativeTo(null);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Will close when close BUTTON pressed
         f.setResizable(false);
+        //f.setUndecorated(true);
 
 
         //Bottom panel
         pp = new JPanel();
         pp.setBounds(0,gridHEIGHT, gridWIDTH, HEIGHT-gridHEIGHT);
-        pp.setBackground(Color.darkGray);
+        pp.setBackground(bgColor);
         pp.setLayout(null);
         pp.setVisible(true);
 
@@ -162,7 +165,7 @@ public class GraphVisualizingScreen {
         //Right side panel
         bp = new JPanel();
         bp.setBounds(gridWIDTH,0,WIDTH-gridWIDTH, HEIGHT);
-        bp.setBackground(Color.darkGray);
+        bp.setBackground(bgColor);
         bp.setLayout(null);
         bp.setVisible(true);
 
@@ -240,6 +243,7 @@ public class GraphVisualizingScreen {
         });
         stBtn.setBackground(themeColor);
         stBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        //stBtn.setHorizontalAlignment(SwingConstants.LEFT);
         stBtn.setForeground(Color.white);
         stBtn.setFocusable(false);
         stBtn.setBorder(null);
@@ -333,6 +337,7 @@ public class GraphVisualizingScreen {
         });
         sBtn.setBackground(themeColor);
         sBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        //sBtn.setHorizontalAlignment(SwingConstants.LEFT);
         sBtn.setForeground(Color.white);
         sBtn.setFocusable(false);
         sBtn.setBorder(null);
@@ -382,6 +387,7 @@ public class GraphVisualizingScreen {
         });
         rBtn.setBackground(themeColor);
         rBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        //rBtn.setHorizontalAlignment(SwingConstants.LEFT);
         rBtn.setForeground(Color.white);
         rBtn.setFocusable(false);
         rBtn.setBorder(null);
@@ -486,7 +492,7 @@ class MyListCellRenderer extends DefaultListCellRenderer {
         if (isSelected)
             setBackground(themeColor);      //Sets the BG of hovered item
         else
-            setBackground(Color.darkGray);      //Sets the BG of non hovered items
+            setBackground(Color.darkGray.darker());      //Sets the BG of non hovered items
         return this;
     }
 }

@@ -9,8 +9,8 @@ import java.util.Queue;
 public class BreadthFirstSearch {
     private final List<Point> path = new ArrayList<Point>();
 
-    int dist[][] = new int[630/30][990/30];
-    Point prev[][] = new Point[630/30][990/30];
+    int[][] dist = new int[630/30][990/30];
+    Point[][] prev = new Point[630/30][990/30];
 
     public BreadthFirstSearch(GraphVisualize g){
         g.whichAlgorithm = "bfs";

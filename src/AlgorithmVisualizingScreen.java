@@ -49,7 +49,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         btnPanel = new JPanel();
         btnPanel.setBounds(win_WIDTH+10,0, WIDTH - 10 - win_WIDTH, HEIGHT);
-        btnPanel.setBackground(sortarray.BGColor);
+        btnPanel.setBackground(sortarray.BGColor.darker());
         btnPanel.setLayout(null);
         btnPanel.setVisible(true);
         btnPanel.addMouseWheelListener(this::mouseWheelMoved);
@@ -67,13 +67,13 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         f.setResizable(false);      //Resizing will destroy the ratio of grids
 
         textboxText = new JLabel("<html>Enter array size<br>(5-300):</html>");
-        textboxText.setBounds(30, 30, 180, 60);
+        textboxText.setBounds(40, 30, 180, 60);
         textboxText.setFont(new Font(mainFont, Font.PLAIN, 20));
         textboxText.setForeground(Color.white);
 
         jTextField = new JTextField(Integer.toString(arraySize));
         jTextField.setBorder(BorderFactory.createLineBorder(Color.white));
-        jTextField.setBounds(30, 100, 200, 50);
+        jTextField.setBounds(40, 100, 180, 50);
         jTextField.setBackground(new Color(102,102,102));
         jTextField.setForeground(Color.white);
         jTextField.setFont(new Font(mainFont, Font.BOLD, 20));
@@ -102,7 +102,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         });
 
         generateArrayBtn = new JButton("Generate");
-        generateArrayBtn.setBounds(30, 170, 200,50);
+        generateArrayBtn.setBounds(40, 170, 180,50);
         generateArrayBtn.addActionListener(this);
         generateArrayBtn.setBackground(themeColor);
         generateArrayBtn.setFont(new Font(mainFont, Font.BOLD, 20));
@@ -123,7 +123,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         });
 
         startBtn = new JButton("Start");
-        startBtn.setBounds(30, 240, 200,50);
+        startBtn.setBounds(40, 240, 180,50);
         startBtn.addActionListener(this);
         startBtn.setBackground(themeColor);
         startBtn.setFont(new Font(mainFont, Font.BOLD, 20));
@@ -144,7 +144,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         });
 
         jComboBox = new JComboBox<String>(algorithms);
-        jComboBox.setBounds(30, 305, 200, 50);
+        jComboBox.setBounds(40, 305, 180, 50);
         jComboBox.setFont(new Font(mainFont, Font.BOLD, 18));
         jComboBox.setBackground(themeColor);
         jComboBox.setForeground(Color.white);
@@ -173,27 +173,27 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         speedSlider = new JLabel("<html>Use the mouse scroll wheel to change the animation delay.<br>" +
                 " Use the Ctrl or Shift keys along with the scroll wheel to change by bigger amount.</html>");
-        speedSlider.setBounds(30, 350, 200, 120);
+        speedSlider.setBounds(40, 350, 180, 150);
         speedSlider.setFont(new Font(mainFont, Font.PLAIN, 13));
         speedSlider.setForeground(Color.white);
 
         speedText = new JLabel( "Speed: " + sortarray.animSpeed + " ms");
-        speedText.setBounds(30, 460, 200, 50);
+        speedText.setBounds(40, 480, 180, 50);
         speedText.setFont(new Font(mainFont, Font.PLAIN, 18));
         speedText.setForeground(Color.white);
 
         statusText = new JLabel("Unsorted");
-        statusText.setBounds(30, 510, 180, 50);
+        statusText.setBounds(40, 520, 180, 50);
         statusText.setFont(new Font(mainFont, Font.BOLD, 20));
         statusText.setForeground(Color.white);
 
         comparisonText = new JLabel("");
-        comparisonText.setBounds(30, 550, 180, 50);
+        comparisonText.setBounds(40, 550, 180, 50);
         comparisonText.setFont(new Font(mainFont, Font.PLAIN, 18));
         comparisonText.setForeground(Color.white);
 
         bottomBtn = new JButton("Button");
-        bottomBtn.setBounds(30, 620, 200,50);
+        bottomBtn.setBounds(40, 620, 180,50);
         bottomBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

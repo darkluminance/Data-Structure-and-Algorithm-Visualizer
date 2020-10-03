@@ -113,6 +113,8 @@ public class GraphVisualize extends JPanel {
     @Override
     public void paintComponent(Graphics g){
         Graphics2D graphics = (Graphics2D)g;
+        //For smoother edges, turning on Anti Aliasing
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
 
         graphics.setColor(BGColor);                     //BG color

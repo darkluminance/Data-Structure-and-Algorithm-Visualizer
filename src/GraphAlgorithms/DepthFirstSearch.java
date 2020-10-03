@@ -18,7 +18,7 @@ public class DepthFirstSearch {
     }
 
     public boolean DFS(GraphVisualize g, int x, int y, List<Integer> path){
-        if (g.willFind == false) {
+        if (!g.willFind) {
             return false;
         }
         //If the current cell is part of the boundary or not
