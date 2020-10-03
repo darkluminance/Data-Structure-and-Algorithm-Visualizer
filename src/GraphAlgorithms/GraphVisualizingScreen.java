@@ -30,13 +30,14 @@ public class GraphVisualizingScreen {
             "Dijkstra (Not added)",
     };
 
-    public Point mousePos;
+    public Point mousePos;      //Stores the position of the mouse when it's click
 
     public String mainFont = "Century Gothic";
 
     public GraphVisualizingScreen(){
         gv = new GraphVisualize();
 
+        //Main frame
         f = new JFrame("Graph Visualization");
         f.setSize(WIDTH, HEIGHT);   //Setting dimensions
         f.setLayout(null);
@@ -45,31 +46,38 @@ public class GraphVisualizingScreen {
         f.setResizable(false);
 
 
+        //Bottom panel
         pp = new JPanel();
         pp.setBounds(0,gridHEIGHT, gridWIDTH, HEIGHT-gridHEIGHT);
         pp.setBackground(Color.darkGray);
         pp.setLayout(null);
         pp.setVisible(true);
 
-        infoText = new JLabel("<html><font color='#D63031'>Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>" + " " +
+        //Infos on which color represents what
+        infoText = new JLabel("<html>" +
+                "<font color='#D63031'>Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>" + " " +
                 "<font color='#121212'>Wall&nbsp;&nbsp;&nbsp;</font>" + " " +
                 "<font color='#74B9FF'>Visiting&nbsp;&nbsp;&nbsp;</font>" + " " +
-                "<font color='#6C5CE7'>Target&nbsp;&nbsp;&nbsp;</font>" +
-                "<font color='#FDFD96'>Path</font>" + " " +
+                "<font color='#6C5CE7'>Target&nbsp;&nbsp;&nbsp;</font>" + " " +
+                "<font color='#FDFD96'>Path&nbsp;&nbsp;&nbsp;</font>" + " " +
+                "<font color='#00F9D1'>Visited</font>" +
                 "</html>");
-        infoText.setBounds(25, 1, 300, 50);
-        infoText.setFont(new Font(mainFont, Font.BOLD, 18));
+        infoText.setBounds(25, 1, 250, 50);
+        infoText.setFont(new Font("Century Gothic", Font.BOLD, 18));
 
+        //Displays the number of iterations
         iterationText = new JLabel("");
         iterationText.setBounds(280, 5, 180, 50);
-        iterationText.setFont(new Font(mainFont, Font.BOLD, 18));
+        iterationText.setFont(new Font("Century Gothic", Font.BOLD, 18));
         iterationText.setForeground(Color.white);
 
+        //Displays the length of path
         pathLengthText = new JLabel("");
-        pathLengthText.setBounds(430, 5, 180, 50);
-        pathLengthText.setFont(new Font(mainFont, Font.BOLD, 18));
+        pathLengthText.setBounds(435, 5, 180, 50);
+        pathLengthText.setFont(new Font("Century Gothic", Font.BOLD, 18));
         pathLengthText.setForeground(Color.white);
 
+        //Main panel
         p = new JPanel();
         p.setBounds(0,0,gridWIDTH, gridHEIGHT);
         p.setLayout((new GridLayout(1,1 )));
@@ -121,6 +129,7 @@ public class GraphVisualizingScreen {
                 gv.mPos = new Point(0,0);
             }
         });
+        //When scroll wheel is rotated
         p.addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -150,6 +159,7 @@ public class GraphVisualizingScreen {
             }
         });
 
+        //Right side panel
         bp = new JPanel();
         bp.setBounds(gridWIDTH,0,WIDTH-gridWIDTH, HEIGHT);
         bp.setBackground(Color.darkGray);
@@ -164,10 +174,12 @@ public class GraphVisualizingScreen {
         instructionText.setFont(new Font(mainFont, Font.PLAIN, 13));
         instructionText.setForeground(Color.white);
 
+
         statusText = new JLabel("<html>Press Find to start pathfinding</html>");
         statusText.setBounds((WIDTH-gridWIDTH -180)/2, 150, 180, 80);
         statusText.setFont(new Font(mainFont, Font.BOLD, 18));
         statusText.setForeground(Color.white);
+
 
         stBtn = new JButton("Find");
         stBtn.setBounds((WIDTH-gridWIDTH -180)/2, 235, 180,50);
@@ -435,6 +447,11 @@ public class GraphVisualizingScreen {
         GraphVisualizingScreen gvs = new GraphVisualizingScreen();
     }
 
+    //Checks whether mouse click is in the grid area
+    //If left click, paint wall -> 1
+    //If right click, remove wall   -> 0
+    //Shift + left click, set source point  -> 2
+    //Alt + left click, set target point    -> 4
     public void gridPaint(MouseEvent e){
         if (e.getPoint().x >= 32 && e.getPoint().y >= 32 &&
                 e.getPoint().x <= 958 && e.getPoint().y <= 598 && !gv.willFind){
@@ -447,17 +464,9 @@ public class GraphVisualizingScreen {
             gv.Update();
         }
     }
-    public void gridPaint2(MouseEvent e){
-        if (e.getPoint().x >= 32 && e.getPoint().y >= 32 &&
-                e.getPoint().x <= 958 && e.getPoint().y <= 658){
-            if (e.getButton() == MouseEvent.BUTTON1 && e.isShiftDown()) gv.clickState = 2;
-            else if (e.getButton() == MouseEvent.BUTTON1 && e.isAltDown()) gv.clickState = 4;
-            mousePos = e.getPoint();
-            gv.mPos = mousePos;
-            gv.Update();
-        }
-    }
+
 }
+
 //Custom dropdown menu settings
 class MyListCellRenderer extends DefaultListCellRenderer {
     public Color themeColor;

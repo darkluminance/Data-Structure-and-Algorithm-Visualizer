@@ -1,7 +1,6 @@
 package GraphAlgorithms;
 
 import java.awt.*;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +21,12 @@ public class DepthFirstSearch {
         if (g.willFind == false) {
             return false;
         }
+        //If the current cell is part of the boundary or not
         if(x<1 || x>= g.grid[0].length - 1 ||y<1 || y>= g.grid.length - 1 ){
             return false;
         }
 
         g.iterations++;
-            //g.grid[y][x] = 69;
-
 
 
         //Reached the target
@@ -57,8 +55,11 @@ public class DepthFirstSearch {
         }*/
 
 
-
-        if (g.grid[y][x] == 0 || g.grid[y][x] == 2 || g.grid[y][x] == 69){
+        //Whether the current cell is possible to visit
+        //0 = Unvisited
+        //2 = Source
+        //69= Currently visiting
+        if (g.grid[y][x] == 0 || g.grid[y][x] == 2){
             if (g.grid[y][x] == 0)
             {
                 g.grid[y][x] = 5;

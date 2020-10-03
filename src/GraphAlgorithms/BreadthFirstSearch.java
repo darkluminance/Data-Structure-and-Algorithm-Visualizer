@@ -9,8 +9,8 @@ import java.util.Queue;
 public class BreadthFirstSearch {
     private final List<Point> path = new ArrayList<Point>();
 
-    int dist[][] = new int[23][33];
-    Point prev[][] = new Point[23][33];
+    int dist[][] = new int[630/30][990/30];
+    Point prev[][] = new Point[630/30][990/30];
 
     public BreadthFirstSearch(GraphVisualize g){
         g.whichAlgorithm = "bfs";
@@ -19,6 +19,7 @@ public class BreadthFirstSearch {
         g.status = BFS(g);
         System.out.println((System.nanoTime() - start)/10E8);
 
+        //If path is found, then show the path
         if (g.status){
             if (g.willAnimate)
                 g.sleep(250);
@@ -51,17 +52,17 @@ public class BreadthFirstSearch {
         for (int i = 0; i<g.grid.length; i++){
             for (int j = 0; j < g.grid[0].length; j++) {
                 dist[i][j] = 99999;
-                //prev[i][j] = new Point(-1, -1);
                 prev[i][j] = null;
             }
         }
 
         //Add the source to the queue
         q.add(new Point(g.sourceX, g.sourceY));
-        dist[g.sourceY][g.sourceX] = 0;
+        dist[g.sourceY][g.sourceX] = 0;     //Distance of source from the source is 0
 
+        //Loop will occur as long as there is a possible cell to visit
         while (!q.isEmpty()){
-            if (g.willFind == false) {
+            if (!g.willFind) {
                 return false;
             }
             g.iterations++;
@@ -74,6 +75,11 @@ public class BreadthFirstSearch {
 
 
             //Visiting all the neighbours of the current point
+            //1. Set the neighbour cell as visiting
+            //2. Increase distance of neighbour cell from source by 1 from the current cell
+            //3. Set the parent cell of neighbour cell as the current cell
+            //4. Add the neighbour to the queue
+            //5. Increase the level of neighbour cell by 1 from the current cell (Level means how deep it is)
 
             //top
             if (g.grid[v.y-1][v.x] == 0){
@@ -112,6 +118,7 @@ public class BreadthFirstSearch {
             }
 
             //If reached the target
+            //Checking whether neighbour cell is the target cell also counts as iteration. Hence, incrementing it
             if (v.x == g.targetX && v.y == g.targetY){
                 g.iterations++;
                 return true;
@@ -143,7 +150,7 @@ public class BreadthFirstSearch {
 
         }
 
-
+        //If no path is found
         return false;
     }
 

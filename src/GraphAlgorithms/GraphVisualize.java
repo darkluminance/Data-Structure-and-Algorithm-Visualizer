@@ -22,13 +22,13 @@ public class GraphVisualize extends JPanel {
     public int sourceY = gridRows/2;
     public int targetX = gridCols-2;
     public int targetY = gridRows/2;
-    public int clickState = 0;
-    public int place = 0;
-    public int pathPlace = 0;
-    public int getAnimSpeed = 15;
+    public int clickState = 0;                  //Keeps track of which mouse key has been pressed
+    public int place = 0;                       //Which loop the algorithm is in
+    public int pathPlace = 0;                   //The serial of the respective cell in the found path
+    public int getAnimSpeed = 25;
 
     public boolean status;
-    public boolean willFind = false;
+    public boolean willFind = false;            //When stop button is pressed, it becomes true
     public boolean willAnimate = true;
 
     public Point mPos = new Point(0,0);
@@ -37,9 +37,9 @@ public class GraphVisualize extends JPanel {
     public Color BGColor  = Color.darkGray;
 
     public int[][] grid = new int[gridRows][gridCols];
-    public int[][] level = new int[gridRows][gridCols];
+    public int[][] level = new int[gridRows][gridCols];     //Place of each cell in the grid while pathfinding
 
-    public Dictionary pathPos = new Hashtable();
+    public Dictionary pathPos = new Hashtable();            //Stores the found path
 
     public String whichAlgorithm = "";
 
@@ -118,8 +118,8 @@ public class GraphVisualize extends JPanel {
         graphics.setColor(BGColor);                     //BG color
         graphics.fillRect(0,0, WIDTH,HEIGHT);     //Background
 
-        int startX = 0;
-        int startY = 0;
+        int startX = 0;     //This is the x start point of the grid
+        int startY = 0;     //This is the y start point of the grid
 
         grid[sourceY][sourceX] = 2;
         grid[targetY][targetX] = 4;
@@ -169,31 +169,25 @@ public class GraphVisualize extends JPanel {
                 }else if (grid[i][j] == 4){
                     graphics.setColor(new Color(108, 92, 231));
                 }else if (grid[i][j] == 5){
-                    int area = 300;
+                    //If the cell is visited, paint color will be based on the level of the cell.
+                    //Now usually dfs takes up longer paths for which formula is different.
+                    int area = 180;
                     if (whichAlgorithm == "dfs"){
-                        area = 300;
-                    }else if (whichAlgorithm == "bfs"){
                         area = 180;
+                    }else if (whichAlgorithm == "bfs"){
+                        area = 69;
                     }
                     float p = (float) level[i][j];
                     float a = (float) area;
                     float part = p/a * 180 ;
                     if (part >= 180){
-                        part = 180 + 180 - part;
-                    }
-                    if (part <= 0){
-                        part = -part +180;
-                    }
-                    if (part >= 180){
-                        part = 180 + 180 - part;
-                    }
-                    if (part <= 0){
-                        part = -part + 180;
+                        part = 180;
                     }
 
                     Color c = new Color(0, 180-Math.round(part) + 69, 180-Math.round(part) + 29);
                     graphics.setColor(c);
                 }
+                //This is basically checking if the cell is white
                 if(i != 0 && j != 0 && grid[i][j] != 1 && grid[i][j] != 3  && grid[i][j] != 4){
                     if(i == current.y && j == current.x){
                         graphics.setColor(new Color(116, 185, 255));
@@ -203,26 +197,30 @@ public class GraphVisualize extends JPanel {
                     }
 
                 }
+
                 if (i == 0 && j == 0){
                     graphics.setColor(new Color(18, 18, 18, 255));
                 }
-
 
 
                 graphics.fillRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
                 graphics.setColor(BGColor.darker());
                 graphics.drawRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
 
+                //Draw an oval on the source and target cells
                 if (grid[i][j] == 2 || grid[i][j] == 4){
                     graphics.setColor(new Color(253, 253, 150, 255));
                     graphics.fillOval((gridSIZE*j)+startX + (gridSIZE/4),(gridSIZE*i)+startY + (gridSIZE/4), gridSIZE/2, gridSIZE/2);
                 }
 
-                if (grid[i][j] == 2 || grid[i][j] == 5 || grid[i][j] == 3 || grid[i][j] == 69){
+                //Show the level of the cell when it's visited
+                if (grid[i][j] == 5 || grid[i][j] == 3 || grid[i][j] == 69){
                     graphics.setColor(Color.black);
                     g.setFont(new Font("Century Gothic", Font.PLAIN, 8));
                     graphics.drawString(Integer.toString(level[i][j]), (gridSIZE*j)+startX+2,(gridSIZE*i)+startY+28);
                 }
+
+                //If path is found show the path number on the cell (Only for dfs)
                 if (grid[i][j] == 3){
                     if (!pathPos.isEmpty()){
                         String pp = pathPos.get(new Point(i, j)).toString();
@@ -232,9 +230,6 @@ public class GraphVisualize extends JPanel {
                     }
 
                 }
-
-
-
 
             }
         }
