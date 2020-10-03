@@ -53,14 +53,50 @@ public class GraphVisualize extends JPanel {
     //5 = visited
     //69= visiting
     public GraphVisualize(){
-        drawGrid();
+        drawGrid();     randomWalls();
     }
 
-    public void drawGrid(){
+    //Resets all the variables to its initial
+    public void resetValues(){
         current = new Point(0,0);
         pathPos = new Hashtable();
         pathPlace = 0;
+        place = 0;
+        iterations = 0;
 
+        for (int i = 0; i<gridRows; i++){
+            for (int j = 0; j<gridCols; j++){
+                if (grid[i][j] != 1)
+                    grid[i][j] = 0;
+
+                level[i][j] = 0;
+                if (i == 0 || i == gridRows-1)  grid[i][j] = 1;
+                else if (j == 0 || j == gridCols-1)  grid[i][j] = 1;
+            }
+        }
+
+        grid[sourceY][sourceX] = 2;
+        grid[targetY][targetX] = 4;
+
+        Update();
+    }
+
+    //Generate random walls like a maze
+    public void randomWalls(){
+        for (int i = 0; i<gridRows; i++){
+            for (int j = 0; j<gridCols; j++){
+                //69 percent of cells will be passable
+                if (Math.random() * (100 - 0 + 1) + 0 >= 69){
+                    grid[i][j] = 1;
+                }
+                if (i == 0 || i == gridRows-1)  grid[i][j] = 1;
+                else if (j == 0 || j == gridCols-1)  grid[i][j] = 1;
+            }
+        }
+    }
+
+    //Reset the full grid
+    public void drawGrid(){
         for (int i = 0; i<gridRows; i++){
             for (int j = 0; j<gridCols; j++){
                 grid[i][j] = 0;
@@ -69,10 +105,8 @@ public class GraphVisualize extends JPanel {
                 else if (j == 0 || j == gridCols-1)  grid[i][j] = 1;
             }
         }
-        place = 0;
-        iterations = 0;
 
-        Update();
+        resetValues();
     }
 
     //Each time repaint is called, this function runs
@@ -90,17 +124,22 @@ public class GraphVisualize extends JPanel {
         grid[sourceY][sourceX] = 2;
         grid[targetY][targetX] = 4;
 
+        //For every cell in the grid
         for (int i = 0; i<gridRows; i++){
             for (int j = 0; j<gridCols; j++){
+                //If mouse click is valid
                 if (mPos.x >= gridSIZE*j && mPos.x <= gridSIZE*(j+1) &&
                         mPos.y >= gridSIZE*i && mPos.y <= gridSIZE*(i+1)){
 
+                    //If shift + left click is pressed
                     if (clickState == 2){
-                        grid[sourceY][sourceX] = 0;
+                        grid[sourceY][sourceX] = 0;     //Set source
                         sourceY = i;
                         sourceX = j;
-                    }else if (clickState == 4){
-                        grid[targetY][targetX] = 0;
+                    }
+                    //If alt + left click is pressed
+                    else if (clickState == 4){
+                        grid[targetY][targetX] = 0;     //Set target
                         targetY = i;
                         targetX = j;
                     }
@@ -122,56 +161,63 @@ public class GraphVisualize extends JPanel {
                 if (grid[i][j] == 0){
                     graphics.setColor(Color.white);
                 }else if (grid[i][j] == 1){
-                    graphics.setColor(Color.black);
+                    graphics.setColor(new Color(18, 18, 18, 255));
                 }else if (grid[i][j] == 2 || grid[i][j] == -1){
-                    graphics.setColor(Color.green);
+                    graphics.setColor(new Color(214, 48, 49, 255));
                 }else if (grid[i][j] == 3){
-                    graphics.setColor(Color.yellow);
+                    graphics.setColor(new Color(253, 253, 150, 255));
                 }else if (grid[i][j] == 4){
-                    graphics.setColor(Color.magenta);
+                    graphics.setColor(new Color(108, 92, 231));
                 }else if (grid[i][j] == 5){
                     int area = 300;
                     if (whichAlgorithm == "dfs"){
                         area = 300;
                     }else if (whichAlgorithm == "bfs"){
-                        area = 100;
+                        area = 180;
                     }
                     float p = (float) level[i][j];
                     float a = (float) area;
-                    float part = p/a * 255 ;
-                    if (part >= 255){
-                        part = 255 + 255 - part;
+                    float part = p/a * 180 ;
+                    if (part >= 180){
+                        part = 180 + 180 - part;
                     }
                     if (part <= 0){
-                        part = -part;
+                        part = -part +180;
                     }
-                    if (part >= 255){
-                        part = 255 + 255 - part;
+                    if (part >= 180){
+                        part = 180 + 180 - part;
                     }
                     if (part <= 0){
-                        part = -part;
+                        part = -part + 180;
                     }
 
-                    Color c = new Color(Math.round(part), 255-Math.round(part), 255-Math.round(part));
+                    Color c = new Color(0, 180-Math.round(part) + 69, 180-Math.round(part) + 29);
                     graphics.setColor(c);
                 }
                 if(i != 0 && j != 0 && grid[i][j] != 1 && grid[i][j] != 3  && grid[i][j] != 4){
                     if(i == current.y && j == current.x){
-                        graphics.setColor(new Color(9, 132, 227));
+                        graphics.setColor(new Color(116, 185, 255));
                     }
                     if (grid[i][j] == 69){
-                        graphics.setColor(new Color(9, 132, 227));
+                        graphics.setColor(new Color(116, 185, 255));
                     }
 
                 }
                 if (i == 0 && j == 0){
-                    graphics.setColor(Color.black);
+                    graphics.setColor(new Color(18, 18, 18, 255));
                 }
+
 
 
                 graphics.fillRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
                 graphics.setColor(BGColor.darker());
                 graphics.drawRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
+
+                if (grid[i][j] == 2 || grid[i][j] == 4){
+                    graphics.setColor(new Color(253, 253, 150, 255));
+                    graphics.fillOval((gridSIZE*j)+startX + (gridSIZE/4),(gridSIZE*i)+startY + (gridSIZE/4), gridSIZE/2, gridSIZE/2);
+                }
+
                 if (grid[i][j] == 2 || grid[i][j] == 5 || grid[i][j] == 3 || grid[i][j] == 69){
                     graphics.setColor(Color.black);
                     g.setFont(new Font("Century Gothic", Font.PLAIN, 8));
@@ -180,8 +226,8 @@ public class GraphVisualize extends JPanel {
                 if (grid[i][j] == 3){
                     if (!pathPos.isEmpty()){
                         String pp = pathPos.get(new Point(i, j)).toString();
-                        graphics.setColor(Color.red);
-                        g.setFont(new Font("Century Gothic", Font.BOLD, 14));
+                        graphics.setColor(Color.darkGray);
+                        g.setFont(new Font("Century Gothic", Font.BOLD, 13));
                         graphics.drawString(pp, (gridSIZE*j)+startX+1,(gridSIZE*i)+startY+13);
                     }
 

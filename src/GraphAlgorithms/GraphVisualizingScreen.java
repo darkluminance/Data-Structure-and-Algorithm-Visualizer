@@ -20,7 +20,7 @@ public class GraphVisualizingScreen {
     JPanel p,bp, pp;
     JButton sBtn, rBtn, stBtn;
     JLabel statusText, speedText, speedSlider, instructionText;
-    JLabel iterationText, pathLengthText;
+    JLabel iterationText, pathLengthText, infoText;
     JComboBox<String> algorithmSelection;
     GraphVisualize gv;
 
@@ -51,14 +51,22 @@ public class GraphVisualizingScreen {
         pp.setLayout(null);
         pp.setVisible(true);
 
+        infoText = new JLabel("<html><font color='#D63031'>Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>" + " " +
+                "<font color='#121212'>Wall&nbsp;&nbsp;&nbsp;</font>" + " " +
+                "<font color='#74B9FF'>Visiting&nbsp;&nbsp;&nbsp;</font>" + " " +
+                "<font color='#6C5CE7'>Target&nbsp;&nbsp;&nbsp;</font>" +
+                "<font color='#FDFD96'>Path</font>" + " " +
+                "</html>");
+        infoText.setBounds(25, 1, 300, 50);
+        infoText.setFont(new Font(mainFont, Font.BOLD, 18));
 
         iterationText = new JLabel("");
-        iterationText.setBounds(25, 5, 180, 50);
+        iterationText.setBounds(280, 5, 180, 50);
         iterationText.setFont(new Font(mainFont, Font.BOLD, 18));
         iterationText.setForeground(Color.white);
 
         pathLengthText = new JLabel("");
-        pathLengthText.setBounds(200, 5, 180, 50);
+        pathLengthText.setBounds(430, 5, 180, 50);
         pathLengthText.setFont(new Font(mainFont, Font.BOLD, 18));
         pathLengthText.setForeground(Color.white);
 
@@ -245,12 +253,14 @@ public class GraphVisualizingScreen {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rBtn.setEnabled(false);
+                stBtn.setEnabled(false);
                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                     @Override
                     public Void doInBackground() {
                         if (gv.willFind){
                             System.out.println("Stopped");
                             rBtn.setEnabled(true);
+                            stBtn.setEnabled(true);
                             if (gv.status){
                                 statusText.setText("Path found");
                                 iterationText.setText("Iterations: " + gv.iterations);
@@ -289,6 +299,7 @@ public class GraphVisualizingScreen {
                     protected void done() {
                         System.out.println("Done");
                         rBtn.setEnabled(true);
+                        stBtn.setEnabled(true);
                         if (gv.status){
                             statusText.setText("Path found");
                             iterationText.setText("Iterations: " + gv.iterations);
@@ -409,6 +420,7 @@ public class GraphVisualizingScreen {
 
         pp.add(iterationText);
         pp.add(pathLengthText);
+        pp.add(infoText);
 
 
         f.add(p);
@@ -425,7 +437,7 @@ public class GraphVisualizingScreen {
 
     public void gridPaint(MouseEvent e){
         if (e.getPoint().x >= 32 && e.getPoint().y >= 32 &&
-                e.getPoint().x <= 958 && e.getPoint().y <= 598){
+                e.getPoint().x <= 958 && e.getPoint().y <= 598 && !gv.willFind){
             if (e.getButton() == MouseEvent.BUTTON1 && e.isShiftDown()) gv.clickState = 2;
             else if (e.getButton() == MouseEvent.BUTTON1 && e.isAltDown()) gv.clickState = 4;
             else if (e.getButton() == MouseEvent.BUTTON1) gv.clickState = 1;

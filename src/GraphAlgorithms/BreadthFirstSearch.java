@@ -14,7 +14,10 @@ public class BreadthFirstSearch {
 
     public BreadthFirstSearch(GraphVisualize g){
         g.whichAlgorithm = "bfs";
+        g.resetValues();
+        double start = System.nanoTime();
         g.status = BFS(g);
+        System.out.println((System.nanoTime() - start)/10E8);
 
         if (g.status){
             if (g.willAnimate)

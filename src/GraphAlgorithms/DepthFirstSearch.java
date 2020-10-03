@@ -11,9 +11,10 @@ public class DepthFirstSearch {
 
     public DepthFirstSearch(GraphVisualize g, Point source){
         g.whichAlgorithm = "dfs";
+        g.resetValues();
+        double start = System.nanoTime();
         g.status = DFS(g, source.x, source.y, path);
-        System.out.println(g.iterations);
-        System.out.println(g.pathPlace);
+        System.out.println((System.nanoTime() - start)/10E8);
         g.Update();
     }
 
