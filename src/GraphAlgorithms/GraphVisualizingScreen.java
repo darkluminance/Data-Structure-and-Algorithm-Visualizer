@@ -2,6 +2,7 @@ package GraphAlgorithms;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.border.Border;
 import java.awt.event.*;
 
 public class GraphVisualizingScreen {
@@ -242,7 +243,7 @@ public class GraphVisualizingScreen {
             }
         });
         stBtn.setBackground(themeColor);
-        stBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        stBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         //stBtn.setHorizontalAlignment(SwingConstants.LEFT);
         stBtn.setForeground(Color.white);
         stBtn.setFocusable(false);
@@ -336,7 +337,7 @@ public class GraphVisualizingScreen {
             }
         });
         sBtn.setBackground(themeColor);
-        sBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        sBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         //sBtn.setHorizontalAlignment(SwingConstants.LEFT);
         sBtn.setForeground(Color.white);
         sBtn.setFocusable(false);
@@ -386,11 +387,12 @@ public class GraphVisualizingScreen {
             }
         });
         rBtn.setBackground(themeColor);
-        rBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        rBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         //rBtn.setHorizontalAlignment(SwingConstants.LEFT);
         rBtn.setForeground(Color.white);
         rBtn.setFocusable(false);
         rBtn.setBorder(null);
+        //rBtn.setBorder(new RoundedBorder(50));
         rBtn.setVisible(true);
         //When the button is hovered
         rBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -471,6 +473,33 @@ public class GraphVisualizingScreen {
         }
     }
 
+    //Rounded border
+    private static class RoundedBorder implements Border {
+
+        private int radius;
+
+
+        RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+
+
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
+        }
+
+
+        public boolean isBorderOpaque() {
+            return true;
+        }
+
+
+        public void paintBorder(Component c, Graphics gg, int x, int y, int width, int height) {
+            Graphics2D g = (Graphics2D)gg;
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.drawRoundRect(x, y, width-1, height-1, radius, radius);
+        }
+    }
 }
 
 //Custom dropdown menu settings
@@ -496,3 +525,4 @@ class MyListCellRenderer extends DefaultListCellRenderer {
         return this;
     }
 }
+

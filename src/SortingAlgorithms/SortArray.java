@@ -1,3 +1,4 @@
+package SortingAlgorithms;
 
 import javax.swing.*;
 import java.awt.*;

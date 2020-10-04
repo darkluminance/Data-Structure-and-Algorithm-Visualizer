@@ -1,3 +1,5 @@
+package SortingAlgorithms;
+
 import java.awt.*;
 
 public class SortingAlgorithms {

@@ -1,8 +1,8 @@
+package SortingAlgorithms;
+
 import GraphAlgorithms.GraphVisualizingScreen;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -105,7 +105,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         generateArrayBtn.setBounds(40, 170, 180,50);
         generateArrayBtn.addActionListener(this);
         generateArrayBtn.setBackground(themeColor);
-        generateArrayBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        generateArrayBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         generateArrayBtn.setForeground(Color.white);
         generateArrayBtn.setFocusable(false);
         generateArrayBtn.setBorder(null);
@@ -126,7 +126,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         startBtn.setBounds(40, 240, 180,50);
         startBtn.addActionListener(this);
         startBtn.setBackground(themeColor);
-        startBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        startBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         startBtn.setForeground(Color.white);
         startBtn.setFocusable(false);
         startBtn.setBorder(null);
@@ -145,7 +145,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         jComboBox = new JComboBox<String>(algorithms);
         jComboBox.setBounds(40, 305, 180, 50);
-        jComboBox.setFont(new Font(mainFont, Font.BOLD, 18));
+        jComboBox.setFont(new Font(mainFont, Font.BOLD, 15));
         jComboBox.setBackground(themeColor);
         jComboBox.setForeground(Color.white);
         /*jComboBox.setBackground(Color.darkGray);
@@ -192,7 +192,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         comparisonText.setFont(new Font(mainFont, Font.PLAIN, 18));
         comparisonText.setForeground(Color.white);
 
-        bottomBtn = new JButton("Button");
+        bottomBtn = new JButton("Go to Graph");
         bottomBtn.setBounds(40, 620, 180,50);
         bottomBtn.addActionListener(new ActionListener() {
             @Override
@@ -204,7 +204,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             }
         });
         bottomBtn.setBackground(themeColor);
-        bottomBtn.setFont(new Font(mainFont, Font.BOLD, 20));
+        bottomBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         bottomBtn.setForeground(Color.white);
         bottomBtn.setFocusable(false);
         bottomBtn.setBorder(null);
@@ -321,9 +321,9 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                         }else if (jComboBox.getSelectedItem() == "Merge sort"){
                             new SortingAlgorithms().sortdeMerge(sortarray);
                         }else if (jComboBox.getSelectedItem() == "Quick sort"){
-                            //new SortingAlgorithms().sortdeMerge(sortarray);
+                            //new SortingAlgorithms.SortingAlgorithms().sortdeMerge(sortarray);
                         }else if (jComboBox.getSelectedItem() == "Counting sort"){
-                            //new SortingAlgorithms().sortdeMerge(sortarray);
+                            //new SortingAlgorithms.SortingAlgorithms().sortdeMerge(sortarray);
                         }
                     }
                 }else if (e.getSource() == generateArrayBtn){
