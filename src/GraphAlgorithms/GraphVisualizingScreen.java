@@ -1,5 +1,7 @@
 package GraphAlgorithms;
 
+import MenuScreens.Algorithms;
+
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.Border;
@@ -21,7 +23,7 @@ public class GraphVisualizingScreen {
 
     JFrame f;
     JPanel p,bp, pp;
-    JButton sBtn, rBtn, stBtn;
+    JButton sBtn, rBtn, stBtn, backBtn;
     JLabel statusText, speedText, speedSlider, instructionText;
     JLabel iterationText, pathLengthText, infoText;
     JComboBox<String> algorithmSelection;
@@ -44,7 +46,7 @@ public class GraphVisualizingScreen {
         f = new JFrame("Graph Visualization");
         f.setSize(WIDTH, HEIGHT);   //Setting dimensions
         f.setLayout(null);
-        f.setLocationRelativeTo(null);
+        f.setLocationRelativeTo(null);  //Sets the frame to the middle of the screen
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Will close when close BUTTON pressed
         f.setResizable(false);
         //f.setUndecorated(true);
@@ -81,6 +83,39 @@ public class GraphVisualizingScreen {
         pathLengthText.setFont(new Font("Century Gothic", Font.BOLD, 18));
         pathLengthText.setForeground(Color.white);
 
+
+        backBtn = new JButton("Back");
+        backBtn.setHorizontalAlignment(SwingConstants.CENTER);
+        backBtn.setBounds(gridWIDTH - 80, 5, 80,50);
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //f.setVisible(false);
+                f.dispose();
+                new Algorithms();
+                System.out.println("Came here");
+            }
+        });
+        backBtn.setBackground(Color.darkGray);
+        backBtn.setFont(new Font(mainFont, Font.BOLD, 18));
+        backBtn.setForeground(Color.white);
+        backBtn.setFocusable(false);
+        backBtn.setBorder(null);
+        backBtn.setVisible(true);
+        //When the button is hovered
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (backBtn.isEnabled())
+                    //backBtn.setBackground(Color.darkGray.darker());
+                    backBtn.setForeground(Color.white.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                //backBtn.setBackground(Color.darkGray);
+                backBtn.setForeground(Color.white);
+            }
+        });
+
         //Main panel
         p = new JPanel();
         p.setBounds(0,0,gridWIDTH, gridHEIGHT);
@@ -102,12 +137,7 @@ public class GraphVisualizingScreen {
         p.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.isAltDown() || e.isShiftDown())
-                {
-                    //gridPaint2(e);
-                }
                     gridPaint(e);
-
 
             }
 
@@ -133,6 +163,7 @@ public class GraphVisualizingScreen {
                 gv.mPos = new Point(0,0);
             }
         });
+
         //When scroll wheel is rotated
         p.addMouseWheelListener(new MouseWheelListener() {
             @Override
@@ -183,6 +214,7 @@ public class GraphVisualizingScreen {
         statusText.setBounds((WIDTH-gridWIDTH -180)/2, 150, 180, 80);
         statusText.setFont(new Font(mainFont, Font.BOLD, 18));
         statusText.setForeground(Color.white);
+
 
 
         stBtn = new JButton("Find");
@@ -445,6 +477,7 @@ public class GraphVisualizingScreen {
         pp.add(iterationText);
         pp.add(pathLengthText);
         pp.add(infoText);
+        pp.add(backBtn);
 
 
         f.add(p);

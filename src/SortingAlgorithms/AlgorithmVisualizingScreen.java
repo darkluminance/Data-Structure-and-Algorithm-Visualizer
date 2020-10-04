@@ -1,6 +1,7 @@
 package SortingAlgorithms;
 
 import GraphAlgorithms.GraphVisualizingScreen;
+import MenuScreens.Algorithms;
 
 import javax.swing.*;
 import java.awt.*;
@@ -192,18 +193,18 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         comparisonText.setFont(new Font(mainFont, Font.PLAIN, 18));
         comparisonText.setForeground(Color.white);
 
-        bottomBtn = new JButton("Go to Graph");
+        bottomBtn = new JButton("Back");
         bottomBtn.setBounds(40, 620, 180,50);
         bottomBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //f.setVisible(false);
                 f.dispose();
-                new GraphVisualizingScreen();
+                new Algorithms();
                 System.out.println("Came here");
             }
         });
-        bottomBtn.setBackground(themeColor);
+        bottomBtn.setBackground(Color.darkGray.darker());
         bottomBtn.setFont(new Font(mainFont, Font.BOLD, 18));
         bottomBtn.setForeground(Color.white);
         bottomBtn.setFocusable(false);
@@ -213,11 +214,11 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         bottomBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (bottomBtn.isEnabled())
-                    bottomBtn.setBackground(themeColor.darker());
+                    bottomBtn.setBackground(Color.darkGray.darker().darker());
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                bottomBtn.setBackground(themeColor);
+                bottomBtn.setBackground(Color.darkGray.darker());
             }
         });
 
@@ -238,8 +239,8 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         f.add(btnPanel);
         f.add(panel);
 
-
         f.setVisible(true);   //Visible
+
     }
 
     public static void main(String[] args) {
