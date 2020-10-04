@@ -30,7 +30,7 @@ public class GraphVisualizingScreen {
     String[] algorithms = {
             "Breadth First Search",
             "Depth First Search",
-            "Dijkstra (Not added)",
+            "Dijkstra",
     };
 
     public Point mousePos;      //Stores the position of the mouse when it's click
@@ -218,6 +218,8 @@ public class GraphVisualizingScreen {
                                 new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
                             }else if (algorithmSelection.getSelectedItem() == "Breadth First Search"){
                                 new BreadthFirstSearch(gv);
+                            }else if (algorithmSelection.getSelectedItem() == "Dijkstra"){
+                                new Dijkstra(gv);
                             }
                             gv.willFind = false;
                         }
@@ -303,6 +305,8 @@ public class GraphVisualizingScreen {
                                 new DepthFirstSearch(gv, new Point(gv.sourceX, gv.sourceY));
                             }else if (algorithmSelection.getSelectedItem() == "Breadth First Search"){
                                 new BreadthFirstSearch(gv);
+                            }else if (algorithmSelection.getSelectedItem() == "Dijkstra"){
+                                new Dijkstra(gv);
                             }
 
 

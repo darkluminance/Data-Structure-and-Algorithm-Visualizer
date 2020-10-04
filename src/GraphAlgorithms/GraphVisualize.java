@@ -212,7 +212,7 @@ public class GraphVisualize extends JPanel {
                 //Draw an oval on the source and target cells
                 if (grid[i][j] == 2 || grid[i][j] == 4){
                     graphics.setColor(new Color(253, 253, 150, 255));
-                    graphics.fillOval((gridSIZE*j)+startX + (gridSIZE/4),(gridSIZE*i)+startY + (gridSIZE/4), gridSIZE/2, gridSIZE/2);
+                    graphics.fillOval((gridSIZE*j)+startX + 10 ,(gridSIZE*i)+startY + 10 , gridSIZE/3, gridSIZE/3);
                 }
 
                 //Show the level of the cell when it's visited
