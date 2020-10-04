@@ -23,3 +23,6 @@ A program made in Java that visualizes common data structures and some common so
 
 ### Breadth First Search
 ![Breadth First Search](demos/bfs.gif)
+
+### Dijkstra
+![Dijkstra](demos/dijkstra.gif)
