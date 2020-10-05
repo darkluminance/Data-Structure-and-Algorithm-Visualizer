@@ -1,6 +1,7 @@
 package GraphAlgorithms;
 
 import MenuScreens.Algorithms;
+import MenuScreens.GraphAlgorithms;
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,8 +93,7 @@ public class GraphVisualizingScreen {
             public void actionPerformed(ActionEvent e) {
                 //f.setVisible(false);
                 f.dispose();
-                new Algorithms();
-                System.out.println("Came here");
+                new GraphAlgorithms();
             }
         });
         backBtn.setBackground(Color.darkGray);

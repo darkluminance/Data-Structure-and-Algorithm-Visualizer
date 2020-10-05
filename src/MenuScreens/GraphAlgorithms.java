@@ -8,18 +8,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Algorithms extends JFrame {
+public class GraphAlgorithms {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
-    public static final int win_WIDTH = 1000;
     JFrame c;
     JLabel label1;
     JPanel pp;
-    JButton btn1,btn2,btn3, btn4;
+    JButton btn1,btn2,btn3;
     Font f,f1;
 
-    public Algorithms(){
-        c = new JFrame("Algorithms");
+    public GraphAlgorithms(){
+        c = new JFrame("Graph Algorithms");
         c.setBackground(Color.darkGray);
         c.setBounds(0,0,WIDTH,HEIGHT);
         c.setLocationRelativeTo(null);                  //Sets the frame to the middle of the screen
@@ -34,13 +33,13 @@ public class Algorithms extends JFrame {
         f=new Font("Futura",Font.BOLD,40);
         f1=new Font("Century Gothic",Font.PLAIN,20);
 
-        label1=new JLabel("Algorithms", SwingConstants.CENTER);
+        label1=new JLabel("Graph Algorithms", SwingConstants.CENTER);
         label1.setBounds((WIDTH/2)-250,100,500,50);
         label1.setFont(f);
         label1.setForeground(Color.white);
         pp.add(label1);
 
-        btn1=new JButton("Sorting Algorithms");
+        btn1=new JButton("Maze (Not yet added)");
         btn1.setBounds((WIDTH/2)-150,250,300,50);
         btn1.setForeground(Color.white);
         btn1.setFocusable(false);
@@ -50,8 +49,8 @@ public class Algorithms extends JFrame {
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                c.dispose();
-                new AlgorithmVisualizingScreen();
+                //c.dispose();
+                //new AlgorithmVisualizingScreen();
             }
         });
         //When the button is hovered
@@ -69,7 +68,7 @@ public class Algorithms extends JFrame {
 
         pp.add(btn1);
 
-        btn2=new JButton("Graph Algorithms");
+        btn2=new JButton("Pathfinder");
         btn2.setBounds((WIDTH/2)-150,325,300,50);
         btn2.setForeground(Color.white);
         btn2.setBackground(Color.darkGray.darker());
@@ -80,7 +79,7 @@ public class Algorithms extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 c.dispose();
-                new GraphAlgorithms();
+                new GraphVisualizingScreen();
             }
         });
         //When the button is hovered
@@ -96,37 +95,8 @@ public class Algorithms extends JFrame {
         });
         pp.add(btn2);
 
-        
-        btn4=new JButton("Search Algorithms (Not yet added)");
-        btn4.setBounds((WIDTH/2)-150,400,300,50);
-        btn4.setForeground(Color.white);
-        btn4.setBackground(Color.darkGray.darker());
-        btn4.setFocusable(false);
-        btn4.setBorder(null);
-        btn4.setFont(f1);
-        btn4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //c.dispose();
-                //new Menu();
-            }
-        });
-        //When the button is hovered
-        btn4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (btn4.isEnabled())
-                    btn4.setBackground(Color.darkGray.darker().darker());
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn4.setBackground(Color.darkGray.darker());
-            }
-        });
-        pp.add(btn4);
-
-
         btn3=new JButton("Back");
-        btn3.setBounds((WIDTH/2)-150,475,300,50);
+        btn3.setBounds((WIDTH/2)-150,400,300,50);
         btn3.setForeground(Color.white);
         btn3.setBackground(Color.darkGray.darker());
         btn3.setFocusable(false);
@@ -151,7 +121,6 @@ public class Algorithms extends JFrame {
             }
         });
         pp.add(btn3);
-
 
         pp.setVisible(true);
         c.add(pp);
