@@ -1,5 +1,6 @@
 package MenuScreens;
 
+import GraphAlgorithms.Maze.MazeScreen;
 import GraphAlgorithms.Pathfinder.GraphVisualizingScreen;
 
 import javax.swing.*;
@@ -38,7 +39,7 @@ public class GraphAlgorithms {
         label1.setForeground(Color.white);
         pp.add(label1);
 
-        btn1=new JButton("Maze (Not yet added)");
+        btn1=new JButton("Maze (Working on it)");
         btn1.setBounds((WIDTH/2)-150,250,300,50);
         btn1.setForeground(Color.white);
         btn1.setFocusable(false);
@@ -48,8 +49,8 @@ public class GraphAlgorithms {
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //c.dispose();
-                //new AlgorithmVisualizingScreen();
+                c.dispose();
+                new MazeScreen();
             }
         });
         //When the button is hovered

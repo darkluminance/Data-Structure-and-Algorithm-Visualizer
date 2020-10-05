@@ -10,7 +10,7 @@ import java.util.List;
 public class MazeVisualize extends JPanel{
     public static final int WIDTH = 1280;       //Width of screen
     public static final int HEIGHT = 720;       //Height of screen
-    public static final int gridWIDTH = WIDTH - 1;    //Width of grid
+    public static final int gridWIDTH = WIDTH ;    //Width of grid
     public static final int gridHEIGHT = HEIGHT - 80;   //Height of grid
     public static final int gridSIZE = 20;      //Size of each grid
     public static final int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
@@ -161,7 +161,7 @@ public class MazeVisualize extends JPanel{
                 //Draw an oval on the source and target cells
                 if (grid[i][j] == 2 || grid[i][j] == 4){
                     graphics.setColor(new Color(253, 253, 150, 255));
-                    graphics.fillOval((gridSIZE*j)+startX + 10 ,(gridSIZE*i)+startY + 10 , gridSIZE/3, gridSIZE/3);
+                    graphics.fillOval((gridSIZE*j) +gridSIZE - 2*gridSIZE/3 ,(gridSIZE*i) + gridSIZE - 2*gridSIZE/3 , gridSIZE/3, gridSIZE/3);
                 }
 
             }
