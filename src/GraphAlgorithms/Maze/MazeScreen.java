@@ -6,10 +6,14 @@ import GraphAlgorithms.Pathfinder.GraphVisualizingScreen;
 import MenuScreens.Algorithms;
 import MenuScreens.GraphAlgorithms;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.Border;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MazeScreen {
     public static final int WIDTH = 1280;
@@ -27,7 +31,7 @@ public class MazeScreen {
 
     JFrame f;
     JPanel p,bp;
-    JButton loadBtn, saveBtn, startBtn, resetBtn,instructionsBtn, backBtn;
+    JButton loadBtn, saveBtn, startBtn, resetBtn,instructionsBtn, backBtn, randomMazeBtn;
 
     MazeVisualize gv;
 
@@ -83,7 +87,7 @@ public class MazeScreen {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                gv.mPos = new Point(0,0);
+                gv.mPos = new Point(1280,720);
             }
         });
 
@@ -93,9 +97,9 @@ public class MazeScreen {
         bp.setBackground(bgColor.darker());
         bp.setLayout(null);
 
-
+        int posCounter = 20;
         loadBtn = new JButton("Load Maze");
-        loadBtn.setBounds(20, 5, 100,30);
+        loadBtn.setBounds(posCounter, 5, 100,30);
         loadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,10 +122,17 @@ public class MazeScreen {
                 loadBtn.setForeground(Color.white);
             }
         });
+        loadBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LoadMaze(gv);
+            }
+        });
+        posCounter+=130;
 
 
         saveBtn = new JButton("Save Maze");
-        saveBtn.setBounds(180, 5, 100,30);
+        saveBtn.setBounds(posCounter, 5, 100,30);
         saveBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -144,14 +155,49 @@ public class MazeScreen {
                 saveBtn.setForeground(Color.white);
             }
         });
+        saveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(f,"Maze saved in mazes/maze" + new SaveMaze().Save(gv, false) + ".png");
+            }
+        });
+        posCounter+=130;
+
+        randomMazeBtn = new JButton("Randomize");
+        randomMazeBtn.setBounds(posCounter, 5, 100,30);
+        randomMazeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gv.drawGrid();
+                gv.randomWalls();
+                gv.Update();
+            }
+        });
+        randomMazeBtn.setBackground(Color.darkGray.darker());
+        randomMazeBtn.setFont(new Font(mainFont, Font.BOLD, 15));
+        randomMazeBtn.setForeground(Color.white);
+        randomMazeBtn.setFocusable(false);
+        randomMazeBtn.setBorder(null);
+        randomMazeBtn.setVisible(true);
+        //When the button is hovered
+        randomMazeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                randomMazeBtn.setForeground(Color.white.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                randomMazeBtn.setForeground(Color.white);
+            }
+        });
+        posCounter+=130;
 
 
         startBtn = new JButton("Find Path");
-        startBtn.setBounds(340, 5, 100,30);
+        startBtn.setBounds(posCounter, 5, 100,30);
         startBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //new GraphAlgorithms();
+                new SolveMaze(gv);
             }
         });
         startBtn.setBackground(Color.darkGray.darker());
@@ -170,10 +216,11 @@ public class MazeScreen {
                 startBtn.setForeground(Color.white);
             }
         });
+        posCounter+=130;
 
 
         resetBtn = new JButton("Reset Grid");
-        resetBtn.setBounds(500, 5, 100,30);
+        resetBtn.setBounds(posCounter, 5, 100,30);
         resetBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,16 +244,18 @@ public class MazeScreen {
                 resetBtn.setForeground(Color.white);
             }
         });
+        posCounter+=130;
 
 
 
         instructionsBtn = new JButton("Instructions");
-        instructionsBtn.setBounds(660, 5, 100,30);
+        instructionsBtn.setBounds(posCounter, 5, 100,30);
         instructionsBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(f,"<html><div align: 'Center'>You can draw mazes on the screen and save them with the 'Save Maze' button.<br>" +
                         "You can load mazes using the 'Load Maze' button and select an appropriate maze image<br>" +
+                        "You can generate random walls using the 'Randomize' button and also save it as a maze<br>" +
                         "You can also click on the 'Find Path' to solve the maze and then also save it.</div></html>");
             }
         });
@@ -226,6 +275,7 @@ public class MazeScreen {
                 instructionsBtn.setForeground(Color.white);
             }
         });
+        posCounter+=130;
 
 
         backBtn = new JButton("Back");
@@ -261,6 +311,7 @@ public class MazeScreen {
         bp.add(loadBtn);
         bp.add(saveBtn);
         bp.add(startBtn);
+        bp.add(randomMazeBtn);
         bp.add(backBtn);
         bp.add(resetBtn);
         bp.add(instructionsBtn);

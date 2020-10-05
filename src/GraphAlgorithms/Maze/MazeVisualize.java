@@ -24,7 +24,7 @@ public class MazeVisualize extends JPanel{
 
     public boolean status;
 
-    public Point mPos = new Point(0,0);
+    public Point mPos = new Point(1280,720);
     public Point current = new Point(0,0);
 
     public Color BGColor  = Color.darkGray;
@@ -78,6 +78,20 @@ public class MazeVisualize extends JPanel{
         }
 
         resetValues();
+    }
+
+    //Generate random walls like a maze
+    public void randomWalls(){
+        for (int i = 0; i<gridRows; i++){
+            for (int j = 0; j<gridCols; j++){
+                //69 percent of cells will be passable
+                if (Math.random() * (101) + 0 >= 69){
+                    grid[i][j] = 1;
+                }
+                if (i == 0 || i == gridRows-1)  grid[i][j] = 1;
+                else if (j == 0 || j == gridCols-1)  grid[i][j] = 1;
+            }
+        }
     }
 
     //Each time repaint is called, this function runs
@@ -146,11 +160,8 @@ public class MazeVisualize extends JPanel{
                     graphics.setColor(new Color(253, 253, 150, 255));
                 }else if (grid[i][j] == 4){
                     graphics.setColor(new Color(108, 92, 231));
-                }
-
-
-                if (i == 0 && j == 0){
-                    graphics.setColor(new Color(18, 18, 18, 255));
+                }else if (grid[i][j] == 5 || grid[i][j] == 69){
+                    graphics.setColor(new Color(116, 185, 255));
                 }
 
 
