@@ -1,6 +1,5 @@
 package MenuScreens;
 
-import GraphAlgorithms.GraphVisualizingScreen;
 import SortingAlgorithms.AlgorithmVisualizingScreen;
 
 import javax.swing.*;
@@ -96,7 +95,7 @@ public class Algorithms extends JFrame {
         });
         pp.add(btn2);
 
-        
+
         btn4=new JButton("Search Algorithms (Not yet added)");
         btn4.setBounds((WIDTH/2)-150,400,300,50);
         btn4.setForeground(Color.white);

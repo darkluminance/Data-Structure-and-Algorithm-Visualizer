@@ -1,8 +1,5 @@
 package MenuScreens;
 
-import GraphAlgorithms.GraphVisualizingScreen;
-import SortingAlgorithms.AlgorithmVisualizingScreen;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

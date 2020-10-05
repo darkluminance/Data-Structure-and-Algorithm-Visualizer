@@ -1,7 +1,6 @@
 package MenuScreens;
 
-import GraphAlgorithms.GraphVisualizingScreen;
-import SortingAlgorithms.AlgorithmVisualizingScreen;
+import GraphAlgorithms.Pathfinder.GraphVisualizingScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,7 +105,7 @@ public class GraphAlgorithms {
             @Override
             public void actionPerformed(ActionEvent e) {
                 c.dispose();
-                new Menu();
+                new Algorithms();
             }
         });
         //When the button is hovered

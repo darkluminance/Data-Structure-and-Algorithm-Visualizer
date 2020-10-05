@@ -1,6 +1,5 @@
 package SortingAlgorithms;
 
-import GraphAlgorithms.GraphVisualizingScreen;
 import MenuScreens.Algorithms;
 
 import javax.swing.*;
