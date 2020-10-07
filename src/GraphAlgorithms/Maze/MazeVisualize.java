@@ -12,9 +12,9 @@ public class MazeVisualize extends JPanel{
     public static final int HEIGHT = 720;       //Height of screen
     public static final int gridWIDTH = WIDTH ;    //Width of grid
     public static final int gridHEIGHT = HEIGHT - 80;   //Height of grid
-    public static final int gridSIZE = 20;      //Size of each grid
-    public static final int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
-    public static final int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
+    public int gridSIZE = 20;      //Size of each grid
+    public int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
+    public int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
 
     public int sourceX = 1;
     public int sourceY = gridRows/2;
@@ -23,6 +23,7 @@ public class MazeVisualize extends JPanel{
     public int clickState = 0;                  //Keeps track of which mouse key has been pressed
 
     public boolean status;
+    //public boolean willFind = false;
 
     public Point mPos = new Point(1280,720);
     public Point current = new Point(0,0);
@@ -164,7 +165,6 @@ public class MazeVisualize extends JPanel{
                     graphics.setColor(new Color(116, 185, 255));
                 }
 
-
                 graphics.fillRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
                 graphics.setColor(BGColor.darker());
                 graphics.drawRect((gridSIZE*j)+startX,(gridSIZE*i)+startY, gridSIZE, gridSIZE);
@@ -177,12 +177,20 @@ public class MazeVisualize extends JPanel{
 
             }
         }
-
     }
 
 
     public void Update(){
         validate();
         repaint();
+    }
+
+    //Delay task for t milliseconds
+    public void sleep(int t){
+        try {
+            Thread.sleep(t);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

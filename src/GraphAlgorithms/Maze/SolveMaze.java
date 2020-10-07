@@ -12,10 +12,12 @@ import java.util.Queue;
 public class SolveMaze {
     private final List<Point> path = new ArrayList<Point>();
 
-    int[][] dist = new int[640/20][1280/20];
-    Point[][] prev = new Point[640/20][1280/20];
+    int[][] dist;
+    Point[][] prev;
 
     public SolveMaze(MazeVisualize g){
+        dist  = new int[640/g.gridSIZE][1280/g.gridSIZE];
+        prev  = new Point[640/g.gridSIZE][1280/g.gridSIZE];
         g.resetValues();
         g.status = BFS(g);
         JFrame f = new JFrame();
@@ -33,7 +35,7 @@ public class SolveMaze {
             for (int i = path.size() - 1; i >= 0 ; i--) {
                 g.grid[path.get(i).y][path.get(i).x] = 3;
             }
-            JOptionPane.showMessageDialog(f,"Maze saved in mazes/path" + new SaveMaze().Save(g, true) + ".png");
+            JOptionPane.showMessageDialog(f,"<html>Maze saved in mazes/path" + new SaveMaze().Save(g, true) + ".png" + "<br>Path length is: " + path.size() + "</html>");
 
         }else
             JOptionPane.showMessageDialog(f, "No path found");

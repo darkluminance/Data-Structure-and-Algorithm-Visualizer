@@ -23,18 +23,18 @@ public class SaveMaze {
         }*/
 
         BufferedImage image = new BufferedImage(1280, 720-80, BufferedImage.TYPE_INT_RGB);
-        for (int x = 0; x < 720-80; x+=20) {
-            for (int y = 0; y < 1280; y+=20) {
+        for (int x = 0; x < 720-80; x+=gv.gridSIZE) {
+            for (int y = 0; y < 1280; y+=gv.gridSIZE) {
                 Color c = Color.white;
-                if (gv.grid[x/20][y/20] == 0)     c = Color.white;
-                else if (gv.grid[x/20][y/20] == 1)     c = Color.black;
-                else if (gv.grid[x/20][y/20] == 2  || gv.grid[x/20][y/20] == -1)     c = Color.red;
-                else if (gv.grid[x/20][y/20] == 4)     c = Color.green;
-                else if (gv.grid[x/20][y/20] == 3)     c = Color.yellow;
-                else if (gv.grid[x/20][y/20] == 5  || gv.grid[x/20][y/20] == 69)     c = Color.white;
+                if (gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 0)     c = Color.white;
+                else if (gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 1)     c = Color.black;
+                else if (gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 2  || gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == -1)     c = Color.red;
+                else if (gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 4)     c = Color.green;
+                else if (gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 3)     c = Color.yellow;
+                else if (gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 5  || gv.grid[x/gv.gridSIZE][y/gv.gridSIZE] == 69)     c = Color.white;
 
-                for (int i = x; i < x+20; i++) {
-                    for (int j = y; j < y + 20; j++) {
+                for (int i = x; i < x+gv.gridSIZE; i++) {
+                    for (int j = y; j < y + gv.gridSIZE; j++) {
                         //Color bakap = c;
                         //if (i == x || i == x+19)  c = Color.black;
                         //else if (j == y || j == y+19)  c = Color.black;

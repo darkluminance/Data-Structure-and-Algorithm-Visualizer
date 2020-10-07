@@ -1,8 +1,7 @@
 package GraphAlgorithms.Maze;
 
 
-import GraphAlgorithms.Pathfinder.GraphVisualize;
-import GraphAlgorithms.Pathfinder.GraphVisualizingScreen;
+import GraphAlgorithms.Pathfinder.*;
 import MenuScreens.Algorithms;
 import MenuScreens.GraphAlgorithms;
 
@@ -20,9 +19,9 @@ public class MazeScreen {
     public static final int HEIGHT = 720;
     public static final int gridWIDTH = WIDTH ;    //Width of grid
     public static final int gridHEIGHT = HEIGHT - 80;   //Height of grid
-    public static final int gridSIZE = 20;      //Size of each grid
-    public static final int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
-    public static final int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
+    public int gridSIZE = 20;      //Size of each grid
+    public int gridRows = gridHEIGHT/gridSIZE ;      //Rows in grid
+    public int gridCols = gridWIDTH/gridSIZE;           //Columns in grid
 
     public Color themeColor  = new Color(110,217,161);
     public Color bgColor  = Color.darkGray;
@@ -31,7 +30,7 @@ public class MazeScreen {
 
     JFrame f;
     JPanel p,bp;
-    JButton loadBtn, saveBtn, startBtn, resetBtn,instructionsBtn, backBtn, randomMazeBtn;
+    JButton loadBtn, saveBtn, startBtn, resetBtn,instructionsBtn, backBtn, randomMazeBtn, generateMazeBtn;
 
     MazeVisualize gv;
 
@@ -41,6 +40,7 @@ public class MazeScreen {
 
     public MazeScreen(){
         gv = new MazeVisualize();
+        gridSIZE = gv.gridSIZE;
 
         //Main frame
         f = new JFrame("Maze Visualization");
@@ -125,7 +125,15 @@ public class MazeScreen {
         loadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new LoadMaze(gv);
+                final JFileChooser fc = new JFileChooser();
+                fc.setCurrentDirectory(new java.io.File("./mazes"));
+                fc.setDialogTitle("Choose a maze image");
+                int response = fc.showOpenDialog(f);
+                if(response == JFileChooser.APPROVE_OPTION){
+                    String filename = fc.getSelectedFile().toString();
+                    new LoadMaze(gv, filename);
+                }
+
             }
         });
         posCounter+=130;
@@ -133,12 +141,6 @@ public class MazeScreen {
 
         saveBtn = new JButton("Save Maze");
         saveBtn.setBounds(posCounter, 5, 100,30);
-        saveBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //new GraphAlgorithms();
-            }
-        });
         saveBtn.setBackground(Color.darkGray.darker());
         saveBtn.setFont(new Font(mainFont, Font.BOLD, 15));
         saveBtn.setForeground(Color.white);
@@ -278,6 +280,58 @@ public class MazeScreen {
         posCounter+=130;
 
 
+        generateMazeBtn = new JButton("Generate Maze");
+        generateMazeBtn.setBounds(posCounter, 5, 130,30);
+        generateMazeBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadBtn.setEnabled(false);
+                saveBtn.setEnabled(false);
+                startBtn.setEnabled(false);
+                resetBtn.setEnabled(false);
+                instructionsBtn.setEnabled(false);
+                randomMazeBtn.setEnabled(false);
+                generateMazeBtn.setEnabled(false);
+                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                    @Override
+                    public Void doInBackground() {
+                        new MazeGenerator(gv);
+                        return null;
+                    }
+                    @Override
+                    protected void done() {
+                        System.out.println("Done");
+                        loadBtn.setEnabled(true);
+                        saveBtn.setEnabled(true);
+                        startBtn.setEnabled(true);
+                        resetBtn.setEnabled(true);
+                        instructionsBtn.setEnabled(true);
+                        randomMazeBtn.setEnabled(true);
+                        generateMazeBtn.setEnabled(true);
+                    }
+                };
+                worker.execute();
+            }
+        });
+        generateMazeBtn.setBackground(Color.darkGray.darker());
+        generateMazeBtn.setFont(new Font(mainFont, Font.BOLD, 15));
+        generateMazeBtn.setForeground(Color.white);
+        generateMazeBtn.setFocusable(false);
+        generateMazeBtn.setBorder(null);
+        generateMazeBtn.setVisible(true);
+        //When the button is hovered
+        generateMazeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                generateMazeBtn.setForeground(Color.white.darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                generateMazeBtn.setForeground(Color.white);
+            }
+        });
+        posCounter+=130;
+
+
         backBtn = new JButton("Back");
         backBtn.setBounds(gridWIDTH - 100, 5, 80,30);
         backBtn.addActionListener(new ActionListener() {
@@ -315,6 +369,7 @@ public class MazeScreen {
         bp.add(backBtn);
         bp.add(resetBtn);
         bp.add(instructionsBtn);
+        bp.add(generateMazeBtn);
         bp.setVisible(true);
 
         f.add(p);

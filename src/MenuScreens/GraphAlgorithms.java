@@ -39,7 +39,7 @@ public class GraphAlgorithms {
         label1.setForeground(Color.white);
         pp.add(label1);
 
-        btn1=new JButton("Maze (Working on it)");
+        btn1=new JButton("Maze Generator");
         btn1.setBounds((WIDTH/2)-150,250,300,50);
         btn1.setForeground(Color.white);
         btn1.setFocusable(false);
