@@ -49,19 +49,19 @@ public class SaveMaze {
         File ImageFile;
 
         if (isPaththere) {
-            path = "mazes/paths/path" + v +  ".png";
+            path = "./mazes/paths/path" + v +  ".png";
             ImageFile = new File(path);
             while (ImageFile.exists()){
                 v++;
-                path = "mazes/paths/path" + v +  ".png";
+                path = "./mazes/paths/path" + v +  ".png";
                 ImageFile = new File(path);
             }
         }else {
-            path = "mazes/maze" + v +  ".png";
+            path = "./mazes/maze" + v +  ".png";
             ImageFile = new File(path);
             while (ImageFile.exists()){
                 v++;
-                path = "mazes/maze" + v +  ".png";
+                path = "./mazes/maze" + v +  ".png";
                 ImageFile = new File(path);
             }
         }

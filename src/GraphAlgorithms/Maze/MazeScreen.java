@@ -160,7 +160,7 @@ public class MazeScreen {
         saveBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(f,"Maze saved in mazes/maze" + new SaveMaze().Save(gv, false) + ".png");
+                JOptionPane.showMessageDialog(f,"Maze saved in ./mazes/maze" + new SaveMaze().Save(gv, false) + ".png");
             }
         });
         posCounter+=130;
