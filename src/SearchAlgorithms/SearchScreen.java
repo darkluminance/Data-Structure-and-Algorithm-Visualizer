@@ -1,4 +1,4 @@
-package SortingAlgorithms;
+package SearchAlgorithms;
 
 import MenuScreens.Algorithms;
 
@@ -6,39 +6,43 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class AlgorithmVisualizingScreen implements ActionListener {
+public class SearchScreen implements ActionListener{
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int win_WIDTH = 1000;
 
     public Color themeColor  = new Color(110,217,161);
 
-    public int arraySize = 20;
+    public int arraySize = 25;
+    public int numtofind = 0;
 
     JFrame f;
     JPanel panel, btnPanel;
     JLabel statusText, textboxText, comparisonText, speedText;
     JButton startBtn, generateArrayBtn, bottomBtn;
-    SortArray sortarray;
+    Search search;
     JComboBox<String> jComboBox;
     JTextField jTextField;
     JLabel speedSlider;
 
     String[] algorithms = {
-            "Bubble sort",
-            "Insertion sort",
-            "Selection sort",
-            "Merge sort",
-            "Quick sort (Not added)",
-            "Counting sort (Not added)",
+            "Linear Search",
+            "Binary Search",
     };
 
     public String mainFont = "Century Gothic";
 
-    public AlgorithmVisualizingScreen(){
-        f = new JFrame("Sorting Visualization");
+    public SearchScreen(){
+        f = new JFrame("Searching Visualization");
+        f.setSize(WIDTH, HEIGHT);
+        f.setLayout(null);
+        f.setLocationRelativeTo(null);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Will close when close BUTTON pressed
+        f.setResizable(false);      //Resizing will destroy the ratio of grids
 
-        sortarray = new SortArray(arraySize);
+        search = new Search(arraySize);
+        search.arrSize = arraySize;
+        search.numtofind = numtofind;
 
         panel = new JPanel();
         panel.setBounds(0,0, win_WIDTH+10, HEIGHT);
@@ -49,57 +53,41 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         btnPanel = new JPanel();
         btnPanel.setBounds(win_WIDTH+10,0, WIDTH - 10 - win_WIDTH, HEIGHT);
-        btnPanel.setBackground(sortarray.BGColor.darker());
+        btnPanel.setBackground(search.BGColor.darker());
         btnPanel.setLayout(null);
         btnPanel.setVisible(true);
         btnPanel.addMouseWheelListener(this::mouseWheelMoved);
 
-
-        f.setSize(WIDTH, HEIGHT);   //Setting dimensions
-
-        //Using no layout managers.
-        // DON'T EVEN THINK OF TOUCHING THIS.
-        // PROGRAM DOESN'T WORK FOR SOME REASON IF COMMENTED
-        f.setLayout(null);
-
-        f.setLocationRelativeTo(null);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Will close when close BUTTON pressed
-        f.setResizable(false);      //Resizing will destroy the ratio of grids
-
-        textboxText = new JLabel("<html>Enter array size<br>(5-300):</html>");
+        textboxText = new JLabel("<html>Enter a number to search:</html>");
         textboxText.setBounds(40, 30, 180, 60);
         textboxText.setFont(new Font(mainFont, Font.PLAIN, 20));
         textboxText.setForeground(Color.white);
 
-        jTextField = new JTextField(Integer.toString(arraySize));
+        jTextField = new JTextField(Integer.toString(numtofind));
         jTextField.setBorder(BorderFactory.createLineBorder(Color.white));
         jTextField.setBounds(40, 100, 180, 50);
         jTextField.setBackground(new Color(102,102,102));
         jTextField.setForeground(Color.white);
         jTextField.setFont(new Font(mainFont, Font.BOLD, 20));
-        jTextField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try{
-                    int a = Integer.parseInt(jTextField.getText());
-
-                    if (Integer.parseInt(jTextField.getText())>=5 && Integer.parseInt(jTextField.getText())<=300){
-                        arraySize = Integer.parseInt(jTextField.getText());
-                        System.out.println(arraySize);
-                        startBtn.setEnabled(true);
-                        statusText.setText("Press Generate");
-                        comparisonText.setText("");
-                    }else{
-                        throw new NumberFormatException("Invalid number");
-                    }
-                }catch (NumberFormatException ne){
-                    System.out.println("Parbona");
-                    startBtn.setEnabled(false);
-                    statusText.setText("Invalid size format");
+        jTextField.addActionListener(e -> {
+            try{
+                if (Integer.parseInt(jTextField.getText())>=0 && Integer.parseInt(jTextField.getText())<=99999){
+                    numtofind = Integer.parseInt(jTextField.getText());
+                    System.out.println(numtofind);
+                    startBtn.setEnabled(true);
+                    statusText.setText("Press Search");
                     comparisonText.setText("");
+                }else{
+                    throw new NumberFormatException("Invalid number");
                 }
+            }catch (NumberFormatException ne){
+                System.out.println("Parbona");
+                startBtn.setEnabled(false);
+                statusText.setText("Invalid size format");
+                comparisonText.setText("");
             }
         });
+
 
         generateArrayBtn = new JButton("Generate");
         generateArrayBtn.setBounds(40, 170, 180,50);
@@ -122,7 +110,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             }
         });
 
-        startBtn = new JButton("Start");
+        startBtn = new JButton("Search");
         startBtn.setBounds(40, 240, 180,50);
         startBtn.addActionListener(this);
         startBtn.setBackground(themeColor);
@@ -139,7 +127,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                    startBtn.setBackground(themeColor);
+                startBtn.setBackground(themeColor);
             }
         });
 
@@ -152,7 +140,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         //jComboBox.setForeground(new Color(110,217,161));
         jComboBox.setForeground(Color.white);*/
         //jComboBox.setUI(ColorArrowUI.createUI(jComboBox));
-        jComboBox.setRenderer(new MyListCellRenderer(themeColor));
+        jComboBox.setRenderer(new MyListCellsRenderer(themeColor));
         jComboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -160,14 +148,10 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                     speedText.setText( "Speed: " + sortarray.animSpeed*2 + " ms");
                 }
                 else*/
-                    speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
+                speedText.setText( "Speed: " + search.animSpeed + " ms");
             }
         });
-
         jComboBox.setSelectedIndex(0);
-        //jComboBox.setFocusable(false);
-
-        //jComboBox.addItemListener(this);
         jComboBox.setVisible(true);
 
 
@@ -177,23 +161,23 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         speedSlider.setFont(new Font(mainFont, Font.PLAIN, 13));
         speedSlider.setForeground(Color.white);
 
-        speedText = new JLabel( "Speed: " + sortarray.animSpeed + " ms");
+        speedText = new JLabel( "Speed: " + search.animSpeed + " ms");
         speedText.setBounds(40, 480, 180, 50);
         speedText.setFont(new Font(mainFont, Font.PLAIN, 18));
         speedText.setForeground(Color.white);
 
-        statusText = new JLabel("Unsorted");
-        statusText.setBounds(40, 520, 180, 50);
-        statusText.setFont(new Font(mainFont, Font.BOLD, 20));
+        statusText = new JLabel("<html>Enter a number<br>and press search</html>");
+        statusText.setBounds(40, 500, 280, 100);
+        statusText.setFont(new Font(mainFont, Font.BOLD, 15));
         statusText.setForeground(Color.white);
 
         comparisonText = new JLabel("");
-        comparisonText.setBounds(40, 550, 180, 50);
+        comparisonText.setBounds(40, 580, 180, 50);
         comparisonText.setFont(new Font(mainFont, Font.PLAIN, 18));
         comparisonText.setForeground(Color.white);
 
         bottomBtn = new JButton("Back");
-        bottomBtn.setBounds(40, 620, 180,50);
+        bottomBtn.setBounds(40, 628, 180,50);
         bottomBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -232,7 +216,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         btnPanel.add(speedText);
         btnPanel.add(bottomBtn);
 
-        panel.add(sortarray);
+        panel.add(search);
 
 
         f.add(btnPanel);
@@ -240,10 +224,16 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
         f.setVisible(true);   //Visible
 
+
+
+
+
+
     }
 
+
     public static void main(String[] args) {
-        AlgorithmVisualizingScreen avs = new AlgorithmVisualizingScreen();
+        SearchScreen ss = new SearchScreen();
     }
 
 
@@ -252,26 +242,26 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         if (e.isControlDown())
         {
             if (e.getWheelRotation() < 0) {
-                sortarray.animSpeed+= 100;
+                search.animSpeed+= 100;
             } else {
-                if (sortarray.animSpeed - 100 >= 1)    sortarray.animSpeed-= 100;
-                else    sortarray.animSpeed = 1;
+                if (search.animSpeed - 100 >= 1)    search.animSpeed-= 100;
+                else    search.animSpeed = 1;
             }
         }else if(e.isShiftDown()){
             if (e.getWheelRotation() < 0) {
-                sortarray.animSpeed+= 10;
+                search.animSpeed+= 10;
             } else {
-                if (sortarray.animSpeed - 10 >= 1)    sortarray.animSpeed-= 10;
-                else    sortarray.animSpeed = 1;
+                if (search.animSpeed - 10 >= 1)    search.animSpeed-= 10;
+                else    search.animSpeed = 1;
             }
         }else{
             if (e.getWheelRotation() < 0) {
-                sortarray.animSpeed+= 1;
+                search.animSpeed+= 1;
             } else {
-                if (sortarray.animSpeed - 1 >= 1)    sortarray.animSpeed-= 1;
+                if (search.animSpeed - 1 >= 1)    search.animSpeed-= 1;
             }
         }
-        speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
+        speedText.setText( "Speed: " + search.animSpeed + " ms");
     }
 
     @Override
@@ -289,7 +279,7 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                     speedText.setText( "Speed: " + sortarray.animSpeed*2 + " ms");
                 }
                 else*/
-                    speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
+                speedText.setText( "Speed: " + search.animSpeed + " ms");
 
                 if (e.getSource() == startBtn){
                     /*
@@ -298,47 +288,38 @@ public class AlgorithmVisualizingScreen implements ActionListener {
                     If false, then change status to sorting..., start the sorting algorithm code and change
                     button text to 'Stop'
                     */
-                    if (sortarray.isSorting){
-                        startBtn.setText("Start");
+                    if (search.isSearching){
+                        startBtn.setText("Search");
                         statusText.setText("Stopped");
-                        sortarray.isSorting = false;
+                        search.isSearching = false;
 
                         return null;
                     }else{
-                        System.out.println("Sort started");
-                        statusText.setText("Sorting...");
+                        statusText.setText("Searching...");
                         startBtn.setText("Stop");
-                        //jComboBox.setEnabled(false);
+                        jComboBox.setEnabled(false);
 
+                        numtofind = Integer.parseInt(jTextField.getText());
+                        search.numtofind = numtofind;
+                        statusText.setText("Searching " + numtofind + "...");
 
                         //Sort based on the dropdown menu selection
-                        if (jComboBox.getSelectedItem() == "Bubble sort"){
-                            new SortingAlgorithms().bubbleSort(sortarray);
-                        }else if (jComboBox.getSelectedItem() == "Insertion sort"){
-                            new SortingAlgorithms().insertionSort(sortarray);
-                        }else if (jComboBox.getSelectedItem() == "Selection sort"){
-                            new SortingAlgorithms().selectionSort(sortarray);
-                        }else if (jComboBox.getSelectedItem() == "Merge sort"){
-                            new SortingAlgorithms().sortdeMerge(sortarray);
-                        }else if (jComboBox.getSelectedItem() == "Quick sort"){
-                            //new SortingAlgorithms.SortingAlgorithms().sortdeMerge(sortarray);
-                        }else if (jComboBox.getSelectedItem() == "Counting sort"){
-                            //new SortingAlgorithms.SortingAlgorithms().sortdeMerge(sortarray);
+                        if (jComboBox.getSelectedItem() == "Linear Search"){
+                            new SearchAlgorithms().LinearSearch(search);
+                        }else if (jComboBox.getSelectedItem() == "Binary Search") {
+                            new SearchAlgorithms().BinarySearch(search);
                         }
                     }
                 }else if (e.getSource() == generateArrayBtn){
                     try{
-                        int a = Integer.parseInt(jTextField.getText());
-
-                        if (Integer.parseInt(jTextField.getText())>=5 && Integer.parseInt(jTextField.getText())<=300){
-                            arraySize = Integer.parseInt(jTextField.getText());
-                            System.out.println(arraySize);
+                        if (Integer.parseInt(jTextField.getText())>=0 && Integer.parseInt(jTextField.getText())<=99999){
+                            numtofind = Integer.parseInt(jTextField.getText());
                             //Generate new array
                             statusText.setText("Generating...");
                             startBtn.setEnabled(false);
-                            sortarray.GenerateRandomArray(arraySize);
+                            search.GenerateRandomArray(arraySize);
 
-                            statusText.setText("Unsorted");
+                            statusText.setText("");
                             startBtn.setEnabled(true);
                             comparisonText.setText("");
                         }else{
@@ -366,20 +347,22 @@ public class AlgorithmVisualizingScreen implements ActionListener {
 
                 //After the operation is done, reenable the items again
                 generateArrayBtn.setEnabled(true);
+                jComboBox.setEnabled(true);
                 jTextField.setEnabled(true);
-                //jComboBox.setEnabled(true);
-                startBtn.setText("Start");
-                sortarray.isSorting = false;
-                speedText.setText( "Speed: " + sortarray.animSpeed + " ms");
+                startBtn.setText("Search");
+                search.isSearching = false;
+                speedText.setText( "Speed: " + search.animSpeed + " ms");
 
                 //Change the status text
                 if (e.getSource() == startBtn){
-                    if (sortarray.IsSorted()){
-                        statusText.setText("Sorted");
-                        comparisonText.setText(sortarray.comparisons + " comparisons");
+                    if (search.IsFound){
+                        statusText.setText("Found " + numtofind);
+                        comparisonText.setText(search.comparisons + " comparisons");
+                    }else{
+                        statusText.setText(numtofind + " Not Found");
                     }
                 }else if(e.getSource() == generateArrayBtn){
-                    //statusText.setText("Unsorted");
+                    statusText.setText("Press search");
                     startBtn.setEnabled(true);
                 }
             }
@@ -387,13 +370,14 @@ public class AlgorithmVisualizingScreen implements ActionListener {
         worker.execute();       //Keep executing the codes while operation is being performed
 
     }
+
 }
 
 //Custom dropdown menu settings
-class MyListCellRenderer extends DefaultListCellRenderer {
+class MyListCellsRenderer extends DefaultListCellRenderer {
     public Color themeColor;
 
-    public MyListCellRenderer(Color t) {
+    public MyListCellsRenderer(Color t) {
         setOpaque(true);  //Not transparent
         this.themeColor = t;
     }

@@ -3,6 +3,9 @@
 
 A program made in Java that visualizes common data structures and some common sorting and graph algorithms. This was a group project in 2nd year of my Undergraduate studies
 
+
+##Algorithms
+
 ## Sorting Algorithms
 ### Bubble Sort
 ![Bubble Sort](demos/bubblesort.gif)
@@ -26,3 +29,11 @@ A program made in Java that visualizes common data structures and some common so
 
 ### Dijkstra
 ![Dijkstra](demos/dijkstra.gif)
+
+
+## Search Algorithms
+### Linear Search
+![Linear Search](demos/linearsearch.gif)
+
+### Binary Search
+![Binary Search](demos/binarysearch.gif)

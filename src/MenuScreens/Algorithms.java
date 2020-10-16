@@ -1,5 +1,6 @@
 package MenuScreens;
 
+import SearchAlgorithms.SearchScreen;
 import SortingAlgorithms.AlgorithmVisualizingScreen;
 
 import javax.swing.*;
@@ -96,7 +97,7 @@ public class Algorithms extends JFrame {
         pp.add(btn2);
 
 
-        btn4=new JButton("Search Algorithms (Not yet added)");
+        btn4=new JButton("Search Algorithms");
         btn4.setBounds((WIDTH/2)-150,400,300,50);
         btn4.setForeground(Color.white);
         btn4.setBackground(Color.darkGray.darker());
@@ -106,8 +107,8 @@ public class Algorithms extends JFrame {
         btn4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //c.dispose();
-                //new Menu();
+                c.dispose();
+                new SearchScreen();
             }
         });
         //When the button is hovered
