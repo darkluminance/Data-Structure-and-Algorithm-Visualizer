@@ -141,16 +141,6 @@ public class SearchScreen implements ActionListener{
         jComboBox.setForeground(Color.white);*/
         //jComboBox.setUI(ColorArrowUI.createUI(jComboBox));
         jComboBox.setRenderer(new MyListCellsRenderer(themeColor));
-        jComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                /*if (jComboBox.getSelectedItem() == "Merge sort"){
-                    speedText.setText( "Speed: " + sortarray.animSpeed*2 + " ms");
-                }
-                else*/
-                speedText.setText( "Speed: " + search.animSpeed + " ms");
-            }
-        });
         jComboBox.setSelectedIndex(0);
         jComboBox.setVisible(true);
 

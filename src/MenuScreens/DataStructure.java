@@ -1,5 +1,7 @@
 package MenuScreens;
 
+import Array.ArrayScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +14,7 @@ public class DataStructure extends JFrame {
     JFrame c;
     JLabel label1;
     JPanel pp;
-    JButton btn1,btn2,btn3;
+    JButton btn1,btn2,btn3, arraybtn;
     Font f,f1;
 
     public DataStructure(){
@@ -94,7 +96,7 @@ public class DataStructure extends JFrame {
         pp.add(btn2);
 
         btn3=new JButton("Back");
-        btn3.setBounds((WIDTH/2)-150,400,300,50);
+        btn3.setBounds((WIDTH/2)-150,475,300,50);
         btn3.setForeground(Color.white);
         btn3.setBackground(Color.darkGray.darker());
         btn3.setFocusable(false);
@@ -115,10 +117,38 @@ public class DataStructure extends JFrame {
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn2.setBackground(Color.darkGray.darker());
+                btn3.setBackground(Color.darkGray.darker());
             }
         });
         pp.add(btn3);
+
+
+        arraybtn=new JButton("Array");
+        arraybtn.setBounds((WIDTH/2)-150,400,300,50);
+        arraybtn.setForeground(Color.white);
+        arraybtn.setBackground(Color.darkGray.darker());
+        arraybtn.setFocusable(false);
+        arraybtn.setBorder(null);
+        arraybtn.setFont(f1);
+        arraybtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                c.dispose();
+                new ArrayScreen();
+            }
+        });
+        //When the button is hovered
+        arraybtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (arraybtn.isEnabled())
+                    arraybtn.setBackground(Color.darkGray.darker().darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                arraybtn.setBackground(Color.darkGray.darker());
+            }
+        });
+        pp.add(arraybtn);
 
         pp.setVisible(true);
         c.add(pp);
