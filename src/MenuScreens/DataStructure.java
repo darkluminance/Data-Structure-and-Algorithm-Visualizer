@@ -1,6 +1,7 @@
 package MenuScreens;
 
 import Array.ArrayScreen;
+import Queuee.Queueee;
 import Stacc.Staccc;
 
 import javax.swing.*;
@@ -69,7 +70,7 @@ public class DataStructure extends JFrame {
 
         pp.add(btn1);
 
-        btn2=new JButton("Queue (Not yet added)");
+        btn2=new JButton("Queue");
         btn2.setBounds((WIDTH/2)-150,325,300,50);
         btn2.setForeground(Color.white);
         btn2.setBackground(Color.darkGray.darker());
@@ -79,8 +80,8 @@ public class DataStructure extends JFrame {
         btn2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //c.dispose();
-                //new GraphVisualizingScreen();
+                c.dispose();
+                new Queueee();
             }
         });
         //When the button is hovered

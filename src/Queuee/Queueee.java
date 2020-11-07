@@ -1,4 +1,4 @@
-package Stacc;
+package Queuee;
 
 
 import MenuScreens.DataStructure;
@@ -6,9 +6,10 @@ import MenuScreens.DataStructure;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class Staccc extends JPanel{
+public class Queueee extends JPanel{
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int win_WIDTH = 1000;
@@ -21,11 +22,26 @@ public class Staccc extends JPanel{
     public Color orangeColor  = new Color(226, 160, 86);
     Color[] arrayColor;       //Stores color of each item representing array elements while searching
 
-    Stack<String> arr = new Stack<>();
-    String[] stackArray = new String[10];
+    //Stack<String> arr = new Stack<>();
+    Queue<String> arr = new LinkedList<>();
+    String[] queueArray = new String[10];
+    Queue<Queuepair> ar = new LinkedList<>();
 
-    public int stackSize = 10;
+    Toolkit t=Toolkit.getDefaultToolkit();
+
+    Image[] queueImages = {
+            t.getImage("./queues/1.png"),
+            t.getImage("./queues/2.png"),
+            t.getImage("./queues/3.png"),
+            t.getImage("./queues/4.png"),
+            t.getImage("./queues/5.png"),
+    };
+    Image deskgirl = t.getImage("./queues/deskgirl.png");
+    Image speechbubble = t.getImage("./queues/speechbubble.png");
+
+    public int queueSize = 10;
     public int topPos = 0;
+    public int queueS = 0;
     public int numtoact = 0;
     public int animSpeed = 1000;                   //Initial speed of the sorting animation
 
@@ -40,8 +56,18 @@ public class Staccc extends JPanel{
 
     public String mainFont = "Century Gothic";
 
-    public Staccc(){
-        f = new JFrame("Stack Visualization");
+    public class Queuepair{
+        Image im;
+        String val;
+
+        public Queuepair(Image i, String v){
+            this.im = i;
+            this.val = v;
+        }
+    }
+
+    public Queueee(){
+        f = new JFrame("Queue Visualization");
         f.setSize(WIDTH, HEIGHT);
         f.setLayout(null);
         f.setLocationRelativeTo(null);
@@ -70,8 +96,8 @@ public class Staccc extends JPanel{
         resetBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                statusText = "Array has been reset";
-                Reset(stackSize);
+                statusText = "Queue has been reset";
+                Reset(queueSize);
             }
         });
         resetBtn.setBackground(themeColor);
@@ -93,7 +119,7 @@ public class Staccc extends JPanel{
         });
         pos += 50;
 
-        datainputtext = new JLabel("Enter Value to push: ");
+        datainputtext = new JLabel("Enter Value to add: ");
         datainputtext.setBounds(40, pos, 280, 50);
         datainputtext.setFont(new Font(mainFont, Font.PLAIN, 15));
         datainputtext.setForeground(Color.white);
@@ -113,22 +139,31 @@ public class Staccc extends JPanel{
         });
         pos+= 80;
 
-        startBtn = new JButton("Push");
+        startBtn = new JButton("Enqueue");
         startBtn.setBounds(40, pos, 180,40);
         startBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(arr.size()+1 <= stackSize){
-                    String str = input.getText();
-                    arr.push(str);
-                    stackArray[topPos] = str;
-                    arrayColor[topPos] = orangeColor;
-                    topPos++;
-                    statusText = "Pushed " + str + " into the stack";
+                String str = input.getText();
+                if(str.length() > 6){
+                    JOptionPane.showMessageDialog(f,"Data size is too big!!");
+                    Update();
+                    return;
+                }
+                if(str.equals("")){
+                    JOptionPane.showMessageDialog(f,"There is no data!!!");
+                    Update();
+                    return;
+                }
+                if(arr.size()+1 <= queueSize){
+                    arr.add(str);
+                    int rand = (int)(Math.random() * (4 + 1) + 0);
+                    ar.add(new Queuepair(queueImages[rand], str));
+                    statusText = "Added " + str + " into the queue";
                     Update();
                 }else{
-                    JOptionPane.showMessageDialog(f,"Crosses maximum stack size!!");
-                    statusText = "Cannot push because the maximum stack size exceeds";
+                    JOptionPane.showMessageDialog(f,"Crosses maximum queue size!!");
+                    statusText = "Cannot add because the maximum stack size exceeds";
                     Update();
                 }
             }
@@ -152,22 +187,19 @@ public class Staccc extends JPanel{
         });
         pos += 60;
 
-        popBtn = new JButton("Pop");
+        popBtn = new JButton("Dequeue");
         popBtn.setBounds(40, pos, 180,40);
         popBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try{
-                    statusText = "Popped " + arr.peek() + " from the stack";
-                    arr.pop();
-                    stackArray[topPos-1] = "";
-                    arrayColor[topPos-1] = Color.white;
-                    topPos--;
+                if(!arr.isEmpty()){
+                    statusText = "Removed " + arr.peek() + " from the queue";
+                    arr.remove();
+                    ar.remove();
                     Update();
-                }catch (Exception eee){
-                    System.out.println(eee.getMessage());
-                    JOptionPane.showMessageDialog(f,"Stack is empty!!! Nothing to pop.");
-                    statusText = "Stack is empty!!! Nothing to pop.";
+                }else{
+                    JOptionPane.showMessageDialog(f,"Queue is empty!!! Nothing to remove.");
+                    statusText = "Queue is empty!!! Nothing to remove.";
                     Update();
                 }
             }
@@ -234,11 +266,11 @@ public class Staccc extends JPanel{
 
         f.setVisible(true);   //Visible
 
-        Reset(stackSize);
+        Reset(queueSize);
     }
 
     public static void main(String[] args) {
-        Staccc as = new Staccc();
+        Queuee.Queueee as = new Queuee.Queueee();
     }
 
     //Each time repaint is called, this function runs
@@ -249,66 +281,47 @@ public class Staccc extends JPanel{
         //For smoother edges, turning on Anti Aliasing
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
-
-        g.setFont(new Font("Century Gothic", Font.PLAIN, 18));
-        graphics.setColor(BGColor);              //BG color
+        g.setFont(new Font("Century Gothic", Font.PLAIN, 13));
+        graphics.setColor(themeColor);              //BG color
         graphics.fillRect(0,0, WIDTH,HEIGHT);     //Background
 
         int pos = 300;        //X position of first bar
 
+        graphics.drawImage(deskgirl,50,250,deskgirl.getWidth(this)/3,deskgirl.getHeight(this)/3,this);
 
-        graphics.setColor(Color.white);
-        graphics.drawString(statusText, 28, 50);
-        graphics.drawLine(pos, 100, pos+100, 100);
-        graphics.drawLine(pos+300, 100, pos+400, 100);
-        graphics.drawLine(pos+100, 100, pos+100, 600);
-        graphics.drawLine(pos+300, 100, pos+300, 600);
-        graphics.drawLine(pos+100, 600, pos+300, 600);
-
-        pos = 410;
-        int yPos = 550;
-        for (int i = 0; i<stackSize; i++){
-            graphics.setColor(arrayColor[i]);
-            if (topPos - 1 == i){
-                graphics.setColor(blueColor);
-            }
-            graphics.drawString(stackArray[i], pos+50,yPos+25);
-            graphics.drawRect(pos, yPos, 180, 40);
-            /*
-            Toolkit t=Toolkit.getDefaultToolkit();
-            Image z=t.getImage("./queues/1.png");
-            graphics.drawImage(z,120,100,z.getWidth(this)/3,z.getHeight(this)/3,this);
-            */
-
-            if (i == topPos-1){
-                graphics.setColor(Color.white);
-                graphics.drawLine(pos+200, yPos+20, pos+400, yPos+20);
-                graphics.drawString("Top of the stack", pos+420, yPos+25);
-            }
-            yPos-=50;
-
+        graphics.setColor(Color.black);
+        pos = 180;
+        int yPos = 280;
+        for (Queuepair item: ar) {
+            Image qi = item.im;
+            String va = item.val;
+            graphics.drawImage(qi, pos, yPos,qi.getWidth(this)/3,qi.getHeight(this)/3, this);
+            graphics.drawImage(speechbubble, pos+10, yPos-65,speechbubble.getWidth(this)/2,speechbubble.getHeight(this)/2,this);
+            graphics.drawString(va, pos+20, yPos-42);
+            pos+=80;
         }
+
 
     }
 
 
     public void Reset(int n){
-        this.stackSize = n;       //Space between each bar is 2 pixels
+        this.queueSize = n;       //Space between each bar is 2 pixels
         this.topPos = 0;
 
-        this.arr = new Stack<>();
+        this.arr = new LinkedList<>();
         this.arrayColor = new Color[n];
 
-        for (int i = 0; i<stackSize; i++){
+        for (int i = 0; i<queueSize; i++){
             arrayColor[i] = Color.white;
-            stackArray[i] = "";
+            queueArray[i] = "";
         }
 
         resetColors();
 
     }
     public void resetColors(){
-        for (int i = 0; i<stackSize; i++){
+        for (int i = 0; i<queueSize; i++){
             arrayColor[i] = Color.white;
             Update();
         }
