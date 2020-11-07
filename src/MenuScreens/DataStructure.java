@@ -1,6 +1,7 @@
 package MenuScreens;
 
 import Array.ArrayScreen;
+import Stacc.Staccc;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +40,7 @@ public class DataStructure extends JFrame {
         label1.setForeground(Color.white);
         pp.add(label1);
 
-        btn1=new JButton("Stack (Not yet added)");
+        btn1=new JButton("Stack");
         btn1.setBounds((WIDTH/2)-150,250,300,50);
         btn1.setForeground(Color.white);
         btn1.setFocusable(false);
@@ -49,8 +50,8 @@ public class DataStructure extends JFrame {
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //c.dispose();
-                //new AlgorithmVisualizingScreen();
+                c.dispose();
+                new Staccc();
             }
         });
         //When the button is hovered
