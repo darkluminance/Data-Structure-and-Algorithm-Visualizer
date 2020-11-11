@@ -348,7 +348,8 @@ public class ArrayScreen extends JPanel{
                 graphics.setColor(Color.white);
                 g.setFont(new Font("Century Gothic", Font.PLAIN, 15));
             }
-            graphics.drawString(Integer.toString(arr[i]), pos+8, (HEIGHT/2)+20);
+            if(arr[i] != -1)
+                graphics.drawString(Integer.toString(arr[i]), pos+8, (HEIGHT/2)+20);
 
             graphics.setColor(Color.white);
             graphics.drawString("Memory Location: " , 50, (HEIGHT/2)-65);

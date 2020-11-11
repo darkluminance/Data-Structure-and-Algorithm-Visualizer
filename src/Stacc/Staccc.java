@@ -70,7 +70,7 @@ public class Staccc extends JPanel{
         resetBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                statusText = "Array has been reset";
+                statusText = "Reset";
                 Reset(stackSize);
             }
         });
@@ -273,6 +273,7 @@ public class Staccc extends JPanel{
                 graphics.setColor(blueColor);
             }
             graphics.drawString(stackArray[i], pos+50,yPos+25);
+            if(!stackArray[i].equals(""))
             graphics.drawRect(pos, yPos, 180, 40);
             /*
             Toolkit t=Toolkit.getDefaultToolkit();

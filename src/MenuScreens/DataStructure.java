@@ -1,6 +1,7 @@
 package MenuScreens;
 
 import Array.ArrayScreen;
+import BinarySearchTree.BST;
 import Queuee.Queueee;
 import Stacc.Staccc;
 
@@ -16,7 +17,7 @@ public class DataStructure extends JFrame {
     JFrame c;
     JLabel label1;
     JPanel pp;
-    JButton btn1,btn2,btn3, arraybtn;
+    JButton btn1,btn2,btn3, btn4, arraybtn;
     Font f,f1;
 
     public DataStructure(){
@@ -97,8 +98,35 @@ public class DataStructure extends JFrame {
         });
         pp.add(btn2);
 
+        btn4=new JButton("Binary Search Tree");
+        btn4.setBounds((WIDTH/2)-150,475,300,50);
+        btn4.setForeground(Color.white);
+        btn4.setBackground(Color.darkGray.darker());
+        btn4.setFocusable(false);
+        btn4.setBorder(null);
+        btn4.setFont(f1);
+        btn4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                c.dispose();
+                new BST();
+            }
+        });
+        //When the button is hovered
+        btn4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (btn4.isEnabled())
+                    btn4.setBackground(Color.darkGray.darker().darker());
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn4.setBackground(Color.darkGray.darker());
+            }
+        });
+        pp.add(btn4);
+
         btn3=new JButton("Back");
-        btn3.setBounds((WIDTH/2)-150,475,300,50);
+        btn3.setBounds((WIDTH/2)-150,475 + 75,300,50);
         btn3.setForeground(Color.white);
         btn3.setBackground(Color.darkGray.darker());
         btn3.setFocusable(false);

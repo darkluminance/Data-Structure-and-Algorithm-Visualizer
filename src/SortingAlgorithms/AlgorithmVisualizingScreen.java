@@ -29,8 +29,6 @@ public class AlgorithmVisualizingScreen implements ActionListener {
             "Insertion sort",
             "Selection sort",
             "Merge sort",
-            "Quick sort (Not added)",
-            "Counting sort (Not added)",
     };
 
     public String mainFont = "Century Gothic";

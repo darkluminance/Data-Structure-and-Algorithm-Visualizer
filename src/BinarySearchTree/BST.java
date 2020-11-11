@@ -1,15 +1,101 @@
-package Queuee;
-
+package BinarySearchTree;
 
 import MenuScreens.DataStructure;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
-public class Queueee extends JPanel{
+public class BST extends JPanel{
+    int level = 1;
+    public class node{
+        node left;
+        node right;
+        node parent;
+        int value;
+        int posX, posY;
+
+
+        public node(int val){
+            this.value = val;
+        }
+        public node(){
+            this.value = -1;
+        }
+
+        public void addN(node n){
+            current = n;
+            n.posY += 180;
+            //sleep(500);
+            Update();
+            level++;
+            if (level > 4){
+                JOptionPane.showMessageDialog(f,"Height limit reached !!!");
+                return;
+            }
+            if(n.value <= this.value){
+                n.posX -= 420 / level;
+                if (this.left == null){
+                    n.parent = this;
+                    this.left = n;
+                }
+                else
+                    this.left.addN(n);
+            }else{
+                n.posX += 420 / level;
+                if(this.right == null){
+                    n.parent = this;
+                    this.right = n;
+                }
+                else
+                    this.right.addN(n);
+            }
+            level--;
+        }
+    }
+    public class Tree{
+        public node root = null;
+
+        public void addNode(int val){
+            node n = new node(val);
+            if (root == null){
+                Update();
+                root = n;
+                root.posX = win_WIDTH/2;
+                root.posY = 80;
+            }else{
+                n.posX = tree.root.posX;
+                n.posY = tree.root.posY;
+                root.addN(n);
+                //sleep(500);
+                Update();
+            }
+        }
+    }
+    public void inorderRec(node zroot)
+    {
+        if (zroot != null) {
+            inorderRec(zroot.left);
+            traversal = zroot;
+            statusText += zroot.value + " ";
+            System.out.print(zroot.value + " ");
+            Update();
+            sleep(1000);
+            inorderRec(zroot.right);
+        }
+    }
+
+    public void inorderDeletion(node zroot)
+    {
+        tree.root = null;
+        Update();
+    }
+
+    Tree tree = new Tree();
+    node current = null;
+    node traversal = null;
+
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int win_WIDTH = 1000;
@@ -20,28 +106,7 @@ public class Queueee extends JPanel{
     public Color pinkColor  = new Color(226, 86, 186);
     public Color purpleColor  = new Color(128, 86, 226);
     public Color orangeColor  = new Color(226, 160, 86);
-    Color[] arrayColor;       //Stores color of each item representing array elements while searching
 
-    //Stack<String> arr = new Stack<>();
-    Queue<String> arr = new LinkedList<>();
-    String[] queueArray = new String[10];
-    Queue<Queuepair> ar = new LinkedList<>();
-
-    Toolkit t=Toolkit.getDefaultToolkit();
-
-    Image[] queueImages = {
-            t.getImage("./queues/1.png"),
-            t.getImage("./queues/2.png"),
-            t.getImage("./queues/3.png"),
-            t.getImage("./queues/4.png"),
-            t.getImage("./queues/5.png"),
-    };
-    Image deskgirl = t.getImage("./queues/deskgirl.png");
-    Image speechbubble = t.getImage("./queues/speechbubble.png");
-
-    public int queueSize = 10;
-    public int topPos = 0;
-    public int queueS = 0;
     public int numtoact = 0;
     public int animSpeed = 1000;                   //Initial speed of the sorting animation
 
@@ -56,18 +121,8 @@ public class Queueee extends JPanel{
 
     public String mainFont = "Century Gothic";
 
-    public class Queuepair{
-        Image im;
-        String val;
-
-        public Queuepair(Image i, String v){
-            this.im = i;
-            this.val = v;
-        }
-    }
-
-    public Queueee(){
-        f = new JFrame("Queue Visualization");
+    public BST(){
+        f = new JFrame("Binary Search Tree Visualization");
         f.setSize(WIDTH, HEIGHT);
         f.setLayout(null);
         f.setLocationRelativeTo(null);
@@ -96,8 +151,8 @@ public class Queueee extends JPanel{
         resetBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                statusText = "Queue has been reset";
-                Reset(queueSize);
+                statusText = "Tree has been Reset";
+                Reset();
             }
         });
         resetBtn.setBackground(themeColor);
@@ -139,33 +194,25 @@ public class Queueee extends JPanel{
         });
         pos+= 80;
 
-        startBtn = new JButton("Enqueue");
+
+        startBtn = new JButton("Insert");
         startBtn.setBounds(40, pos, 180,40);
         startBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String str = input.getText();
-                if(str.length() > 6){
-                    JOptionPane.showMessageDialog(f,"Maximum length of data is 6 !!");
+                int v;
+                try{
+                    v = Integer.parseInt(input.getText());
+                    level = 1;
+                    tree.addNode(v);
+                    statusText = v + " added to the tree";
                     Update();
-                    return;
-                }
-                if(str.equals("")){
-                    JOptionPane.showMessageDialog(f,"There is no data!!!");
-                    Update();
-                    return;
-                }
-                if(arr.size()+1 <= queueSize){
-                    arr.add(str);
-                    int rand = (int)(Math.random() * (4 + 1) + 0);
-                    ar.add(new Queuepair(queueImages[rand], str));
-                    statusText = "Added " + str + " into the queue";
-                    Update();
-                }else{
-                    JOptionPane.showMessageDialog(f,"Queue is full!!");
-                    statusText = "Cannot add because the maximum size exceeds";
+                }catch (Exception exception){
+                    statusText = "Error: Failed to add the data";
                     Update();
                 }
+                //inorderRec(tree.root);
+                //System.out.println("In order traversal done");
             }
         });
         startBtn.setBackground(themeColor);
@@ -187,21 +234,46 @@ public class Queueee extends JPanel{
         });
         pos += 60;
 
-        popBtn = new JButton("Dequeue");
+        popBtn = new JButton("Traverse");
         popBtn.setBounds(40, pos, 180,40);
         popBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!arr.isEmpty()){
-                    statusText = "Removed " + arr.peek() + " from the queue";
-                    arr.remove();
-                    ar.remove();
-                    Update();
-                }else{
-                    JOptionPane.showMessageDialog(f,"Queue is empty!!! Nothing to remove.");
-                    statusText = "Queue is empty!!! Nothing to remove.";
-                    Update();
-                }
+                popBtn.setEnabled(false);
+                input.setEnabled(false);
+                startBtn.setEnabled(false);
+                bottomBtn.setEnabled(false);
+                statusText = "";
+                SwingWorker sw1 = new SwingWorker()
+                {
+
+                    @Override
+                    protected String doInBackground() throws Exception
+                    {
+                        // define what thread will do here
+                        inorderRec(tree.root);
+
+                        String res = "Finished Execution";
+                        return res;
+                    }
+
+                    @Override
+                    protected void done()
+                    {
+                        // this method is called when the background
+                        // thread finishes execution
+
+                        popBtn.setEnabled(true);
+                        input.setEnabled(true);
+                        startBtn.setEnabled(true);
+                        bottomBtn.setEnabled(true);
+                        traversal = null;
+                        Update();
+                    }
+                };
+
+                // executes the swingworker on worker thread
+                sw1.execute();
             }
         });
         popBtn.setBackground(themeColor);
@@ -222,7 +294,6 @@ public class Queueee extends JPanel{
             }
         });
         pos += 60;
-
 
         bottomBtn = new JButton("Back");
         bottomBtn.setBounds(40, 600, 180,40);
@@ -266,11 +337,11 @@ public class Queueee extends JPanel{
 
         f.setVisible(true);   //Visible
 
-        Reset(queueSize);
+        Reset();
     }
 
     public static void main(String[] args) {
-        Queuee.Queueee as = new Queuee.Queueee();
+        BST bst = new BST();
     }
 
     //Each time repaint is called, this function runs
@@ -281,52 +352,70 @@ public class Queueee extends JPanel{
         //For smoother edges, turning on Anti Aliasing
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
-        g.setFont(new Font("Century Gothic", Font.PLAIN, 13));
-        graphics.setColor(themeColor);              //BG color
+
+        g.setFont(new Font("Century Gothic", Font.PLAIN, 18));
+        graphics.setColor(BGColor);              //BG color
         graphics.fillRect(0,0, WIDTH,HEIGHT);     //Background
 
-        int pos = 300;        //X position of first bar
+        int posX = win_WIDTH/2;        //X position of root
+        int posY = 80;                 //Y position of root
 
-        graphics.drawImage(deskgirl,50,250,deskgirl.getWidth(this)/3,deskgirl.getHeight(this)/3,this);
+        graphics.setColor(Color.white);
 
-        graphics.setColor(Color.black);
-        pos = 180;
-        int yPos = 280;
-        for (Queuepair item: ar) {
-            Image qi = item.im;
-            String va = item.val;
-            graphics.drawImage(qi, pos, yPos,qi.getWidth(this)/3,qi.getHeight(this)/3, this);
-            graphics.drawImage(speechbubble, pos+10, yPos-65,speechbubble.getWidth(this)/2,speechbubble.getHeight(this)/2,this);
-            graphics.drawString(va, pos+32-va.length()*2, yPos-38);
-            pos+=80;
+        Stack<node> s = new Stack<node>();
+        node curr = tree.root;
+
+        graphics.drawString(statusText, 28, 80);
+
+        // traverse the tree
+        while (curr != null || s.size() > 0)
+        {
+            /* Reach the left most Node of the
+            curr Node */
+            while (curr !=  null)
+            {
+                /* place pointer to a tree node on
+                   the stack before traversing
+                  the node's left subtree */
+                s.push(curr);
+                curr = curr.left;
+            }
+
+            /* Current must be NULL at this point */
+            curr = s.pop();
+
+            if(curr.parent != null)
+            {
+                graphics.setColor(Color.white);
+                graphics.drawLine(curr.posX, curr.posY, curr.parent.posX, curr.parent.posY);
+            }
+            if (curr == current){
+                graphics.setColor(orangeColor);
+            }else{
+                graphics.setColor(blueColor);
+            }
+            if (curr == traversal){
+                graphics.setColor(pinkColor);
+            }
+
+            graphics.fillOval(curr.posX-8, curr.posY - 30, 45,45);
+            graphics.setColor(Color.black);
+            graphics.drawString(Integer.toString(curr.value), curr.posX, curr.posY);
+
+
+            /* we have visited the node and its
+               left subtree.  Now, it's right
+               subtree's turn */
+            curr = curr.right;
+
         }
 
 
     }
 
 
-    public void Reset(int n){
-        this.queueSize = n;       //Space between each bar is 2 pixels
-        this.topPos = 0;
-
-        this.arr = new LinkedList<>();
-        this.queueArray = new String[10];
-        this.ar = new LinkedList<>();
-        this.arrayColor = new Color[n];
-
-        for (int i = 0; i<queueSize; i++){
-            arrayColor[i] = Color.white;
-            queueArray[i] = "";
-        }
-
-        resetColors();
-
-    }
-    public void resetColors(){
-        for (int i = 0; i<queueSize; i++){
-            arrayColor[i] = Color.white;
-            Update();
-        }
+    public void Reset(){
+        inorderDeletion(tree.root);
     }
 
     public void Update(){
@@ -370,4 +459,5 @@ public class Queueee extends JPanel{
     }
 
 }
+
 
